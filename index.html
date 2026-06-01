@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>행복한 왕자 : 사라지는 도시</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;600;700&display=swap');
+
+:root {
+  /* 고딕 미스터리 — 명탐정 코난 붉은 복도, 횃불, 석조 */
+  --bg:      #0d0704;          /* 아주 어두운 적갈색 검정 */
+  --border:  #2a1810;
+  --white:   #f5ede0;          /* 불빛에 비친 따뜻한 흰색 */
+  --ivory:   #eee0c8;
+  --cream:   #d8c8a8;
+  --mist:    #a08060;
+  --fog:     #604830;
+  --shadow:  #2e1a0e;
+  --gold:    #e8841a;          /* 횃불 주황 */
+  --gold2:   #a85010;          /* 어두운 불꽃 */
+  --sage:    #c87830;          /* 불꽃 황갈 */
+  --slate:   #904828;          /* 적갈 */
+  --crimson: #cc2020;          /* 선혈 붉은색 */
+  --serif:   'Nanum Myeongjo', serif;
+  --title:   'Nanum Myeongjo', serif;
+  --mono:    'DM Mono', monospace;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);font-family:var(--serif);min-height:100vh;overflow-x:hidden;color:var(--cream);}
+
+/* 고딕 벽돌 그레인 오버레이 */
+body::after{
+  content:'';
+  position:fixed;inset:0;z-index:1;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(180,60,10,0.025) 3px,
+      rgba(180,60,10,0.025) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 3px,
+      rgba(100,30,5,0.015) 3px,
+      rgba(100,30,5,0.015) 4px
+    );
+  pointer-events:none;
+}
+
+#curtain{
+  position:fixed;inset:0;z-index:300;
+  background:#0d0704;opacity:0;pointer-events:none;
+  transition:opacity 0.45s ease;
+}
+#curtain.show{opacity:1;pointer-events:all;}
+
+/* ══════════════════════
+   타이틀
+══════════════════════ */
+#title-screen{
+  position:fixed;inset:0;z-index:100;
+  overflow:hidden;background:var(--bg);
+}
+
+/* 타이틀 배경: 어두운 창고/폐공장 내부 — 잿빛+파란 빛 */
+.title-bg-img{
+  position:absolute;inset:0;
+  /* 어두운 산업 공간 — 잿빛 */
+  background-image:url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=1800&q=90&fm=jpg');
+  background-size:cover;
+  background-position:center 50%;
+  filter:brightness(0.18) saturate(0.12) hue-rotate(200deg) contrast(1.2);
+  animation:bgDrift 22s ease-in-out infinite alternate;
+}
+@keyframes bgDrift{
+  0%  {background-position:50% 48%;}
+  50% {background-position:51% 52%;}
+  100%{background-position:50% 50%;}
+}
+
+/* 타이틀 배경 레이어2: 횃불 붉은 오버레이 */
+.title-bg-overlay{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1800&q=85&fm=jpg');
+  background-size:cover;
+  background-position:center 60%;
+  filter:brightness(0.2) saturate(1.2) sepia(1) hue-rotate(330deg) contrast(1.4);
+  mix-blend-mode:screen;
+  opacity:0.55;
+  animation:overlayDrift 28s ease-in-out infinite alternate;
+}
+@keyframes overlayDrift{
+  0%  {opacity:0.34;}
+  50% {opacity:0.42;}
+  100%{opacity:0.36;}
+}
+
+/* 왕자 동상 이미지 레이어 (가운데) — 잿빛 실루엣 */
+.title-statue{
+  position:absolute;
+  bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:clamp(180px,24vw,340px);
+  height:clamp(300px,54vh,580px);
+  background-image:url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&q=90&fm=jpg');
+  background-size:cover;
+  background-position:center 10%;
+  /* 차갑고 잿빛인 실루엣 — 파란 윤곽 */
+  filter:brightness(0.30) saturate(0.4) sepia(0.6) hue-rotate(340deg) contrast(1.5);
+  mask-image:linear-gradient(to top, #0d0704 0%, transparent 10%, transparent 80%, rgba(13,7,4,0.4) 100%);
+  -webkit-mask-image:linear-gradient(to top, #0d0704 0%, transparent 10%, transparent 80%, rgba(13,7,4,0.4) 100%);
+  animation:statueFloat 7s ease-in-out infinite;
+}
+@keyframes statueFloat{
+  0%,100%{transform:translateX(-50%) translateY(0px);}
+  50%{transform:translateX(-50%) translateY(-7px);}
+}
+
+/* 그라데이션 오버레이들 */
+.title-vignette{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 50% 50%, transparent 25%, rgba(4,4,10,0.65) 100%),
+    linear-gradient(to bottom, rgba(4,4,10,0.6) 0%, transparent 25%, transparent 55%, rgba(4,4,10,0.98) 90%);
+}
+
+/* 횃불 후광 (동상 위) */
+.title-glow{
+  position:absolute;
+  bottom:clamp(160px,28vh,300px);
+  left:50%;transform:translateX(-50%);
+  width:clamp(120px,22vw,260px);
+  height:clamp(80px,14vw,160px);
+  border-radius:50%;
+  background:radial-gradient(ellipse, rgba(232,132,26,0.22) 0%, rgba(180,60,10,0.10) 50%, transparent 75%);
+  animation:glowPulse 3s ease infinite;
+}
+@keyframes glowPulse{
+  0%,100%{opacity:1;transform:translateX(-50%) scale(1);}
+  50%{opacity:0.45;transform:translateX(-50%) scale(1.2);}
+}
+
+.title-content{
+  position:absolute;inset:0;z-index:5;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:0 24px 20px;
+  text-align:center;
+}
+
+/* 순차 등장 애니메이션 */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px);}
+  to{opacity:1;transform:translateY(0);}
+}
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+@keyframes lineGrow{
+  from{height:0;opacity:0;}
+  to{height:44px;opacity:1;}
+}
+
+.t-eye{
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.44em;color:var(--fog);
+  margin-bottom:14px;text-transform:uppercase;
+  opacity:0;
+  animation:fadeIn 1s ease 0.4s forwards;
+}
+
+.t-main{
+  font-family:var(--title);
+  font-size:clamp(44px,9.5vw,82px);
+  font-weight:700;line-height:0.95;
+  color:var(--ivory);letter-spacing:0.1em;
+  text-shadow:0 2px 40px rgba(232,132,26,0.2), 0 0 80px rgba(0,0,0,0.9);
+  margin-bottom:10px;
+  opacity:0;
+  animation:fadeUp 1.2s ease 0.8s forwards;
+}
+
+.t-kr{
+  font-family:var(--serif);
+  font-size:clamp(12px,2.2vw,17px);
+  color:var(--fog);letter-spacing:0.28em;
+  margin-bottom:36px;
+  opacity:0;
+  animation:fadeIn 1s ease 1.6s forwards;
+}
+
+.t-line{
+  width:1px;height:0;
+  background:linear-gradient(to bottom,var(--gold2),transparent);
+  margin:0 auto 24px;
+  opacity:0;
+  animation:lineGrow 0.8s ease 2.2s forwards;
+}
+
+.t-desc{
+  font-size:13px;font-weight:400;
+  color:var(--mist);line-height:2.05;
+  max-width:310px;margin-bottom:52px;
+  opacity:0;
+  animation:fadeUp 1s ease 2.6s forwards;
+}
+
+.start-btn{
+  all:unset;cursor:pointer;
+  font-family:var(--mono);font-size:10px;
+  letter-spacing:0.34em;text-transform:uppercase;
+  color:var(--bg);background:var(--ivory);
+  padding:15px 50px;
+  transition:all 0.38s;
+  opacity:0;
+  animation:fadeUp 1s ease 3.2s forwards;
+}
+.start-btn:hover{background:#f8f4ec;letter-spacing:0.48em;}
+
+/* ══════════════════════
+   HUD
+══════════════════════ */
+#game{display:none;}
+#hud{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  padding:10px 36px 8px;
+  display:flex;gap:20px;align-items:flex-end;flex-wrap:wrap;
+  background:linear-gradient(to bottom,rgba(13,7,4,0.97) 55%,transparent);
+  border-bottom:1px solid rgba(28,28,40,0.9);
+}
+.hud-logo{
+  font-family:var(--serif);font-size:13px;
+  letter-spacing:0.12em;color:var(--cream);
+  margin-right:auto;opacity:0.85;
+}
+.stat{display:flex;flex-direction:column;gap:5px;min-width:80px;}
+.stat-lbl{font-family:var(--mono);font-size:11px;letter-spacing:0.22em;color:var(--fog);}
+.bw{height:3px;background:var(--border);overflow:hidden;}
+.bar{height:100%;transition:width 0.85s cubic-bezier(0.4,0,0.2,1);}
+.bar.i{background:#c07030;}
+.bar.s{background:#7a8898;}
+.bar.n{background:#a84040;}
+.stat-num{font-family:var(--mono);font-size:17px;color:var(--cream);}
+.flags{display:flex;gap:7px;padding-bottom:1px;}
+.flag{font-family:var(--mono);font-size:11px;padding:3px 9px;border:1px solid rgba(150,130,100,0.4);color:rgba(150,130,100,0.7);letter-spacing:0.1em;transition:all 0.4s;}
+.flag.on{border-color:var(--gold);color:var(--gold);background:rgba(232,132,26,0.1);}
+
+/* ══════════════════════════════════════
+   씬 레이아웃 — 화면 꽉 채우기
+══════════════════════════════════════ */
+#scene-wrap{
+  position:fixed;
+  top:56px;left:0;right:0;bottom:0;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* ── 이미지 패널 ── */
+.s-img{
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+  height:38%;
+  flex:0 0 38%;
+  position:relative;
+  overflow:hidden;
+  display:block;
+  border:1px solid rgba(232,132,26,0.12);
+}
+.s-img svg{
+  position:absolute;inset:0;
+  width:100%;height:100%;display:block;
+}
+.s-img::before{
+  content:'장면';
+  position:absolute;top:12px;left:14px;z-index:10;
+  font-family:'Nanum Myeongjo',serif;
+  font-size:9px;letter-spacing:0.18em;
+  color:rgba(232,132,26,0.55);
+  border:1px solid rgba(232,132,26,0.2);
+  padding:2px 8px;pointer-events:none;
+}
+.s-img::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:40%;
+  background:linear-gradient(to bottom,transparent,var(--bg));
+  pointer-events:none;z-index:2;
+}
+.s-img .scene-badge{
+  position:absolute;top:12px;right:14px;z-index:10;
+  font-family:var(--serif);font-size:13px;letter-spacing:0.08em;
+  color:rgba(232,132,26,0.85);pointer-events:none;
+  font-weight:700;
+  text-shadow:0 2px 8px rgba(0,0,0,0.9);
+}
+.s-img .scene-overlay{
+  position:absolute;bottom:0;left:0;right:0;z-index:5;
+  padding:30px 20px 14px;
+  display:flex;flex-direction:column;gap:3px;
+  background:linear-gradient(to bottom,transparent,rgba(10,3,1,0.95));
+  pointer-events:none;
+}
+.s-img .scene-overlay .ov-eye{
+  display:none;
+}
+.s-img .scene-overlay .ov-title{
+  display:none;
+}
+.s-img .tint{position:absolute;inset:0;mix-blend-mode:multiply;}
+
+.s-body{
+  flex:1;
+  min-height:0;
+  width:100%;
+  max-width:900px;
+  margin:0 auto;
+  padding:16px 60px 12px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+/* 씬 헤더 */
+.s-eye{font-family:var(--mono);font-size:11px;letter-spacing:0.3em;color:var(--fog);margin-bottom:4px;text-transform:uppercase;}
+.s-title{font-family:var(--serif);font-size:clamp(26px,3.8vw,36px);font-weight:700;line-height:1.05;color:var(--ivory);margin-bottom:4px;}
+.s-title em{font-style:italic;color:var(--gold);}
+.s-place{font-family:var(--mono);font-size:11px;color:var(--fog);letter-spacing:0.1em;line-height:1.5;}
+.cond{
+  margin-top:5px;padding:5px 12px;margin-bottom:6px;
+  border-left:2px solid var(--gold2);
+  background:rgba(232,132,26,0.06);
+  font-family:var(--mono);font-size:11px;
+  color:var(--gold);letter-spacing:0.06em;line-height:1.75;
+}
+
+/* 서사 */
+.narr{padding:10px 0 8px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--border);margin-top:10px;flex:1;min-height:0;overflow:hidden;}
+.sd{font-family:var(--mono);font-size:11px;color:var(--fog);letter-spacing:0.07em;line-height:1.72;border-left:1px solid var(--border);padding-left:14px;}
+.dlg{display:flex;flex-direction:column;gap:6px;}
+.spk{font-family:var(--mono);font-size:11px;letter-spacing:0.3em;text-transform:uppercase;}
+.spk.pr{color:var(--gold);}
+.spk.sw{color:var(--sage);}
+.spk.mg{color:var(--slate);}
+.spk.pz{color:var(--crimson);}
+.spk.fy{color:#c090e0;}
+.line{
+  font-family:var(--serif);
+  font-size:clamp(15px,1.6vw,18px);
+  font-weight:400;line-height:1.82;
+  color:var(--white);letter-spacing:0.01em;
+}
+.rule{
+  height:1px;flex-shrink:0;
+  background:linear-gradient(to right,transparent,var(--border) 20%,var(--border) 80%,transparent);
+  margin:10px 0;
+}
+
+/* 선택지 */
+.choices{padding:12px 0 8px;display:flex;flex-direction:row;flex-wrap:wrap;gap:8px;flex-shrink:0;}
+.c-head{
+  font-family:var(--mono);font-size:8px;
+  letter-spacing:0.24em;color:var(--fog);
+  text-transform:uppercase;margin-bottom:3px;
+}
+.cbtn{
+  all:unset;cursor:pointer;
+  display:flex;align-items:center;gap:14px;
+  padding:16px 20px;
+  flex:1;min-width:180px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.01);
+  position:relative;overflow:hidden;
+  transition:transform 0.18s ease,border-color 0.18s,background 0.18s;
+}
+.cbtn::before{
+  content:'';position:absolute;left:0;top:0;right:0;height:2px;
+  background:var(--gold);opacity:0;transition:opacity 0.18s;
+}
+.cbtn:hover{transform:translateY(-3px);border-color:rgba(232,132,26,0.4);background:rgba(232,132,26,0.05);}
+.cbtn:hover::before{opacity:1;}
+.cbtn:hover .ck{color:var(--gold);}
+.cbtn.bad::before{background:var(--crimson);}
+.cbtn.bad:hover{border-color:rgba(204,32,32,0.4);background:rgba(204,32,32,0.06);}
+.cbtn.bad:hover .ck{color:var(--crimson);}
+.ck{font-family:var(--mono);font-size:13px;color:var(--mist);min-width:26px;flex-shrink:0;transition:color 0.18s;}
+.cc{display:flex;flex-direction:column;gap:2px;}
+.cm{font-family:var(--serif);font-size:17px;font-weight:700;color:var(--ivory);line-height:1.3;}
+.cd{font-family:var(--serif);font-size:13px;color:var(--mist);line-height:1.4;}
+.ce{font-family:var(--mono);font-size:11px;color:var(--sage);letter-spacing:0.06em;}
+.cbtn.bad .ce{color:var(--crimson);}
+.warn-b{
+  flex-shrink:0;padding:5px 10px;
+  border-left:2px solid var(--crimson);
+  background:rgba(204,32,32,0.07);
+  font-family:var(--mono);font-size:9px;
+  color:var(--crimson);letter-spacing:0.05em;line-height:1.5;
+  margin-bottom:4px;animation:wp 2.5s ease infinite;
+}
+@keyframes wp{0%,100%{opacity:1}50%{opacity:0.45}}
+
+/* 엔딩 */
+.end-wrap{
+  flex:1;min-height:0;overflow:hidden;
+  padding:14px 0 8px;
+  display:flex;flex-direction:column;gap:10px;
+  animation:eIn 1.2s ease forwards;
+}
+@keyframes eIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.end-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.26em;color:var(--fog);text-transform:uppercase;flex-shrink:0;}
+.end-title{font-family:var(--serif);font-size:clamp(20px,3vw,34px);font-weight:700;line-height:1.05;flex-shrink:0;}
+.end-title.bad  {color:var(--crimson);}
+.end-title.rev  {color:var(--gold);}
+.end-title.integ{color:var(--sage);}
+.end-text{
+  font-family:var(--serif);font-size:clamp(12px,1.4vw,15px);
+  font-weight:400;line-height:1.75;color:var(--cream);
+  border-left:2px solid var(--border);padding-left:14px;flex-shrink:0;
+}
+.end-stats{
+  display:flex;gap:24px;flex-shrink:0;
+  padding:10px 0;
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+.es{display:flex;flex-direction:column;gap:5px;}
+.esl{font-family:var(--mono);font-size:8px;letter-spacing:0.22em;color:var(--fog);}
+.esv{font-family:var(--mono);font-size:18px;}
+.restart-btn{
+  all:unset;cursor:pointer;flex-shrink:0;
+  font-family:var(--mono);font-size:9px;
+  letter-spacing:0.2em;color:var(--fog);
+  border:1px solid var(--border);
+  padding:8px 20px;text-transform:uppercase;
+  transition:all 0.24s;align-self:flex-start;
+}
+.restart-btn:hover{color:var(--ivory);border-color:var(--mist);}
+.scene-in{animation:sIn 0.7s ease forwards;}
+@keyframes sIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="curtain"></div>
+
+<!-- ══ 타이틀 ══ -->
+<div id="title-screen">
+  <!-- 배경 레이어1: 어두운 안개 골목 -->
+  <div class="title-bg-img"></div>
+  <!-- 배경 레이어2: 희미한 가로등 안개 (screen blend) -->
+  <div class="title-bg-overlay"></div>
+  <!-- 왕자 동상 실루엣 -->
+  <div class="title-statue"></div>
+  <!-- 황금 후광 -->
+  <div class="title-glow"></div>
+  <!-- 비네팅 -->
+  <div class="title-vignette"></div>
+
+  <div class="title-content">
+    <p class="t-eye">Oscar Wilde · Interactive Fiction · Mystery</p>
+    <h1 class="t-main">THE HAPPY<br>PRINCE</h1>
+    <p class="t-kr">행복한 왕자 — 사라지는 도시</p>
+    <div class="t-line"></div>
+    <p class="t-desc">
+      움직일 수 없는 왕자가 녹슨 심장으로<br>
+      도시를 살리거나 파괴하는<br>
+      15분의 비극.
+    </p>
+    <button class="start-btn" onclick="startGame()">시작하다 →</button>
+  </div>
+</div>
+
+<!-- ══ 게임 ══ -->
+<div id="game">
+  <div id="hud">
+    <span class="hud-logo">행복한 왕자 — 사라지는 도시</span>
+    <div class="stat">
+      <span class="stat-lbl">INTEGRITY</span>
+      <div class="bw"><div class="bar i" id="bar-i" style="width:0%"></div></div>
+      <span class="stat-num" id="val-i">0</span>
+    </div>
+    <div class="stat">
+      <span class="stat-lbl">SYNC</span>
+      <div class="bw"><div class="bar s" id="bar-s" style="width:0%"></div></div>
+      <span class="stat-num" id="val-s">0</span>
+    </div>
+    <div class="stat">
+      <span class="stat-lbl">NOISE</span>
+      <div class="bw"><div class="bar n" id="bar-n" style="width:0%"></div></div>
+      <span class="stat-num" id="val-n">0</span>
+    </div>
+    <div class="flags">
+      <span class="flag" id="f-s2a">S2A</span>
+      <span class="flag" id="f-s3a">S3A</span>
+      <span class="flag" id="f-key">KEY</span>
+    </div>
+  </div>
+  <div id="scene-wrap"></div>
+</div>
+
+<script>
+/* ── 상태 ── */
+let G={i:0,s:0,n:0,s2a:false,s3a:false,key:false};
+const MAX=60;
+function ch(k,d){G[k]=Math.max(0,G[k]+d);hud();}
+function hud(){
+  ['i','s','n'].forEach(k=>{
+    document.getElementById('val-'+k).textContent=G[k];
+    document.getElementById('bar-'+k).style.width=Math.min(100,(G[k]/MAX)*100)+'%';
+  });
+  document.getElementById('f-s2a').classList.toggle('on',G.s2a);
+  document.getElementById('f-s3a').classList.toggle('on',G.s3a);
+  document.getElementById('f-key').classList.toggle('on',G.key);
+}
+function go(fn){
+  const c=document.getElementById('curtain');
+  c.classList.add('show');
+  setTimeout(()=>{fn();window.scrollTo({top:0,behavior:'instant'});setTimeout(()=>c.classList.remove('show'),80);},460);
+}
+function render(h){document.getElementById('scene-wrap').innerHTML=h;}
+function btn(k,m,d,e,cb,bad=false){
+  return `<button class="cbtn${bad?' bad':''}" onclick="${cb}">
+    <span class="ck">[${k}]</span>
+    <span class="cc">
+      <span class="cm">${m}</span>
+      ${d?`<span class="cd">${d}</span>`:''}
+      ${e?`<span class="ce">${e}</span>`:''}
+    </span>
+  </button>`;
+}
+
+
+
+/* ══════════════════════════════════
+   공통 SVG 헬퍼
+══════════════════════════════════ */
+const BG = '#0e0704';
+
+function svgWrap(inner, badge='', overlay='') {
+  return `<div class="s-img" style="background:${BG};">
+    <svg width="100%" height="100%" viewBox="0 0 800 320"
+         preserveAspectRatio="xMidYMid slice"
+         xmlns="http://www.w3.org/2000/svg"
+         style="position:absolute;inset:0;display:block;">
+      ${inner}
+    </svg>
+    ${badge   ? `<div class="scene-badge">${badge}</div>` : ''}
+    ${overlay ? `<div class="scene-overlay">${overlay}</div>` : ''}
+  </div>`;
+}
+
+/* 공통 페이드 그라데이션 */
+const FADE = `<defs>
+  <linearGradient id="fd" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0e0503" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#0e0503" stop-opacity="1"/>
+  </linearGradient>
+  <linearGradient id="fd2" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%" stop-color="#0e0503" stop-opacity="0"/>
+    <stop offset="85%" stop-color="#0e0503" stop-opacity="0.85"/>
+    <stop offset="100%" stop-color="#0e0503" stop-opacity="1"/>
+  </linearGradient>
+  <filter id="blur2"><feGaussianBlur stdDeviation="2.5"/></filter>
+  <filter id="blur5"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+</defs>`;
+
+function imgBlock(key) {
+  const map = {
+    s1:'svgS1', s2:'svgS2', s3:'svgS3', s4:'svgS4', s5:'svgS5',
+    endA:'svgEndA', endB:'svgEndB', bad:'svgBad'
+  };
+  return window[map[key]]();
+}
+
+/* ─────────────────────────────────────────
+   S1 · 탑 관측
+   — 잿빛 도시 스카이라인 + 탑 실루엣 + 코어 점멸
+   ───────────────────────────────────────── */
+function svgS1() {
+  const _badge = `제 1 장 · 각성`;
+  const _overlay = `<span class="ov-eye">제 1 장 · 각성</span><span class="ov-title">탑 위의 왕자</span>`;
+  return svgWrap(`${FADE}
+    <defs>
+      <radialGradient id="s1sky" cx="50%" cy="35%" r="60%">
+        <stop offset="0%"   stop-color="#111828"/>
+        <stop offset="100%" stop-color="#0c0402"/>
+      </radialGradient>
+      <radialGradient id="s1core" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#d4a04a" stop-opacity="1"/>
+        <stop offset="40%"  stop-color="#5a3a18" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#0a1828" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="s1tower" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#140703"/>
+        <stop offset="35%"  stop-color="#1e0c06"/>
+        <stop offset="65%"  stop-color="#1a0a05"/>
+        <stop offset="100%" stop-color="#0c0c1a"/>
+      </linearGradient>
+    </defs>
+
+    <!-- 하늘 -->
+    <rect width="800" height="320" fill="url(#s1sky)"/>
+
+    <!-- ── 안개층 ── -->
+    <ellipse cx="400" cy="240" rx="600" ry="90" fill="#0f1520" opacity="0.7"/>
+    <ellipse cx="400" cy="260" rx="500" ry="60" fill="#140603" opacity="0.5"/>
+
+    <!-- ── 뒷 배경 빌딩 (레이어1, 가장 멀리) ── -->
+    <rect x="0"   y="205" width="38"  height="115" fill="#120704" opacity="0.55"/>
+    <rect x="32"  y="188" width="28"  height="132" fill="#0a0a15" opacity="0.55"/>
+    <rect x="54"  y="198" width="22"  height="122" fill="#0c0c1a" opacity="0.5"/>
+    <rect x="70"  y="178" width="34"  height="142" fill="#090914" opacity="0.6"/>
+    <rect x="98"  y="192" width="24"  height="128" fill="#120704" opacity="0.5"/>
+    <rect x="116" y="170" width="44"  height="150" fill="#09091a" opacity="0.6"/>
+    <rect x="154" y="185" width="28"  height="135" fill="#120704" opacity="0.5"/>
+    <rect x="176" y="165" width="52"  height="155" fill="#0e0503" opacity="0.65"/>
+    <rect x="222" y="180" width="32"  height="140" fill="#100604" opacity="0.55"/>
+    <rect x="248" y="160" width="62"  height="160" fill="#0e0503" opacity="0.65"/>
+    <rect x="304" y="175" width="38"  height="145" fill="#100604" opacity="0.55"/>
+    <!-- 오른쪽 -->
+    <rect x="458" y="175" width="38"  height="145" fill="#100604" opacity="0.55"/>
+    <rect x="490" y="160" width="62"  height="160" fill="#0e0503" opacity="0.65"/>
+    <rect x="546" y="180" width="32"  height="140" fill="#100604" opacity="0.55"/>
+    <rect x="572" y="165" width="52"  height="155" fill="#0e0503" opacity="0.65"/>
+    <rect x="618" y="185" width="28"  height="135" fill="#120704" opacity="0.5"/>
+    <rect x="640" y="170" width="44"  height="150" fill="#09091a" opacity="0.6"/>
+    <rect x="678" y="192" width="24"  height="128" fill="#120704" opacity="0.5"/>
+    <rect x="696" y="178" width="34"  height="142" fill="#09091a" opacity="0.6"/>
+    <rect x="724" y="198" width="22"  height="122" fill="#0c0c1a" opacity="0.5"/>
+    <rect x="740" y="188" width="28"  height="132" fill="#0a0a15" opacity="0.55"/>
+    <rect x="762" y="205" width="38"  height="115" fill="#120704" opacity="0.55"/>
+
+    <!-- ── 앞 배경 빌딩 (레이어2, 더 진하게) ── -->
+    <rect x="0"   y="222" width="55"  height="98" fill="#0d0d1c"/>
+    <rect x="48"  y="205" width="42"  height="115" fill="#0c0c1a"/>
+    <rect x="83"  y="215" width="30"  height="105" fill="#140703"/>
+    <rect x="220" y="200" width="48"  height="120" fill="#0c0c1a"/>
+    <rect x="262" y="188" width="36"  height="132" fill="#120704"/>
+    <!-- 오른쪽 앞 -->
+    <rect x="502" y="188" width="36"  height="132" fill="#120704"/>
+    <rect x="532" y="200" width="48"  height="120" fill="#0c0c1a"/>
+    <rect x="687" y="215" width="30"  height="105" fill="#140703"/>
+    <rect x="710" y="205" width="42"  height="115" fill="#0c0c1a"/>
+    <rect x="745" y="222" width="55"  height="98"  fill="#0d0d1c"/>
+
+    <!-- ── 창문 불빛 (파란 잿빛, 희미하게) ── -->
+    <rect x="88"  y="178" width="4" height="6" fill="#6a3020" opacity="0.5"/>
+    <rect x="130" y="174" width="3" height="5" fill="#6a3020" opacity="0.4"/>
+    <rect x="185" y="170" width="4" height="6" fill="#6a3020" opacity="0.45"/>
+    <rect x="260" y="165" width="4" height="5" fill="#6a3020" opacity="0.4"/>
+    <rect x="270" y="180" width="3" height="5" fill="#6a3020" opacity="0.35"/>
+    <rect x="540" y="165" width="4" height="5" fill="#6a3020" opacity="0.4"/>
+    <rect x="550" y="180" width="3" height="5" fill="#6a3020" opacity="0.35"/>
+    <rect x="615" y="170" width="4" height="6" fill="#6a3020" opacity="0.45"/>
+    <rect x="670" y="174" width="3" height="5" fill="#6a3020" opacity="0.4"/>
+    <rect x="712" y="178" width="4" height="6" fill="#6a3020" opacity="0.5"/>
+
+    <!-- ── 코어 후광 (탑 위, 넓게 퍼짐) ── -->
+    <circle cx="400" cy="38" r="70" fill="url(#s1core)" opacity="0.55">
+      <animate attributeName="opacity" values="0.55;0.20;0.55" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="70;90;70"       dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="38" r="30" fill="#5a3a18" opacity="0.4" filter="url(#blur8)">
+      <animate attributeName="opacity" values="0.4;0.1;0.4" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- ── 탑 본체 ── -->
+    <!-- 탑 기단 (넓음) -->
+    <rect x="330" y="180" width="140" height="140" fill="url(#s1tower)"/>
+    <rect x="320" y="230" width="160" height="10"  fill="#1e0a06"/>
+    <rect x="310" y="255" width="180" height="10"  fill="#1a0804"/>
+    <rect x="298" y="278" width="204" height="42"  fill="#180804"/>
+    <!-- 탑 기둥 (얇고 높게) -->
+    <rect x="382" y="30" width="36" height="155" fill="url(#s1tower)"/>
+    <!-- 기둥 하이라이트 (왼쪽 면) -->
+    <rect x="382" y="30" width="3"  height="155" fill="#2a2a42" opacity="0.7"/>
+    <!-- 기둥 상단 크라운 -->
+    <rect x="370" y="22" width="60" height="14" fill="#200c06"/>
+    <rect x="376" y="16" width="48" height="8"  fill="#20203a"/>
+    <rect x="384" y="10" width="32" height="8"  fill="#1c1c34"/>
+
+    <!-- ── 코어 (탑 꼭대기, 선명하게) ── -->
+    <circle cx="400" cy="8" r="7" fill="#c8923a" opacity="0.95">
+      <animate attributeName="opacity" values="0.95;0.2;0.95" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="7;11;7"         dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 코어 링 -->
+    <circle cx="400" cy="8" r="10" fill="none" stroke="#9a4818" stroke-width="1" opacity="0.6">
+      <animate attributeName="opacity" values="0.6;0.1;0.6" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="10;16;10"     dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 코어 중심 -->
+    <circle cx="400" cy="8" r="3" fill="#f0c870"/>
+
+    <!-- ── 안개 페이드 ── -->
+    <rect x="0" y="195" width="800" height="125" fill="url(#fd)"/>
+  `, `제 1 장 · 각성`, `<span class="ov-eye">제 1 장 · 각성</span><span class="ov-title">탑 위의 왕자</span>`);
+}
+
+/* ─────────────────────────────────────────
+   S2 · 거리 그림자
+   — 좁은 골목 원근 + 균열 + 압박 신호
+   ───────────────────────────────────────── */
+function svgS2() {
+  const _badge   = `제 2 장 · 전개`;
+  const _overlay = `<span class="ov-eye">제 2 장 · 전개</span><span class="ov-title">사라지는 거리</span>`;
+  return svgWrap(`${FADE}
+    <defs>
+      <radialGradient id="torch1" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#e87020" stop-opacity="0.7"/>
+        <stop offset="60%"  stop-color="#a03808" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="#300800" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="torch2" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#e06010" stop-opacity="0.65"/>
+        <stop offset="60%"  stop-color="#982808" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="#280600" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="s2wall_l" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#160804"/>
+        <stop offset="100%" stop-color="#0e0503"/>
+      </linearGradient>
+      <linearGradient id="s2wall_r" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#0e0503"/>
+        <stop offset="100%" stop-color="#160804"/>
+      </linearGradient>
+    </defs>
+
+    <rect width="800" height="320" fill="#0a0401"/>
+
+    <!-- 벽 (좌우) -->
+    <rect x="0"   y="0" width="248" height="320" fill="url(#s2wall_l)"/>
+    <rect x="552" y="0" width="248" height="320" fill="url(#s2wall_r)"/>
+
+    <!-- 벽돌 패턴 (좌) — 수평 줄눈 -->
+    <line x1="0"   y1="44"  x2="248" y2="50"  stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="0"   y1="88"  x2="248" y2="97"  stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="0"   y1="132" x2="248" y2="144" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="0"   y1="176" x2="248" y2="191" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="0"   y1="220" x2="248" y2="238" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="0"   y1="265" x2="248" y2="285" stroke="#1e0a05" stroke-width="1.5"/>
+    <!-- 세로 줄눈 (좌) -->
+    <line x1="62"  y1="0" x2="58"  y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+    <line x1="124" y1="0" x2="118" y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+    <line x1="186" y1="0" x2="178" y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+
+    <!-- 벽돌 패턴 (우) -->
+    <line x1="552" y1="44"  x2="800" y2="50"  stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="552" y1="88"  x2="800" y2="97"  stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="552" y1="132" x2="800" y2="144" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="552" y1="176" x2="800" y2="191" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="552" y1="220" x2="800" y2="238" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="552" y1="265" x2="800" y2="285" stroke="#1e0a05" stroke-width="1.5"/>
+    <line x1="614" y1="0" x2="622" y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+    <line x1="676" y1="0" x2="686" y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+    <line x1="738" y1="0" x2="750" y2="320" stroke="#180804" stroke-width="0.8" opacity="0.6"/>
+
+    <!-- 골목 바닥 원근 -->
+    <polygon points="248,320 552,320 480,0 320,0" fill="#0c0401"/>
+    <!-- 바닥 원근선 -->
+    <line x1="400" y1="0" x2="248" y2="320" stroke="#160704" stroke-width="0.6" opacity="0.5"/>
+    <line x1="400" y1="0" x2="552" y2="320" stroke="#160704" stroke-width="0.6" opacity="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="320" stroke="#160704" stroke-width="0.5" opacity="0.35"/>
+
+    <!-- 소실점 빛 (골목 끝, 희미한 붉은 빛) -->
+    <ellipse cx="400" cy="15" rx="55" ry="28" fill="#3a1408" opacity="0.6"/>
+    <ellipse cx="400" cy="8"  rx="22" ry="12" fill="#5a2010" opacity="0.4"/>
+
+    <!-- ── 횃불 (좌벽) ── -->
+    <!-- 횃불 빛 후광 -->
+    <ellipse cx="165" cy="105" rx="80" ry="80" fill="url(#torch1)">
+      <animate attributeName="opacity" values="1;0.6;1" dur="1.8s" repeatCount="indefinite"/>
+    </ellipse>
+    <!-- 횃불 받침대 -->
+    <rect x="160" y="120" width="10" height="28" rx="2" fill="#2a1008"/>
+    <rect x="156" y="118" width="18" height="6"  rx="1" fill="#381408"/>
+    <!-- 횃불 불꽃 -->
+    <path d="M162 118 Q165 105 168 112 Q171 100 165 96 Q159 100 162 108 Q158 104 162 118Z"
+          fill="#e87020" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.5;0.9" dur="0.6s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,0;1,-2;-1,-1;0,0" dur="0.6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M163 118 Q166 108 169 114 Q172 104 166 100 Q160 104 163 111 Q159 107 163 118Z"
+          fill="#f8a020" opacity="0.7">
+      <animate attributeName="opacity" values="0.7;0.3;0.7" dur="0.7s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- ── 횃불 (우벽) ── -->
+    <ellipse cx="635" cy="105" rx="80" ry="80" fill="url(#torch2)">
+      <animate attributeName="opacity" values="0.9;0.55;0.9" dur="2.1s" repeatCount="indefinite"/>
+    </ellipse>
+    <rect x="630" y="120" width="10" height="28" rx="2" fill="#2a1008"/>
+    <rect x="626" y="118" width="18" height="6"  rx="1" fill="#381408"/>
+    <path d="M632 118 Q635 105 638 112 Q641 100 635 96 Q629 100 632 108 Q628 104 632 118Z"
+          fill="#e06010" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.45;0.9" dur="0.8s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" values="0,0;-1,-2;1,-1;0,0" dur="0.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M633 118 Q636 108 639 114 Q642 104 636 100 Q630 104 633 111 Q629 107 633 118Z"
+          fill="#f89818" opacity="0.65">
+      <animate attributeName="opacity" values="0.65;0.28;0.65" dur="0.9s" repeatCount="indefinite"/>
+    </path>
+
+    <!-- 창문 (좌, 어두운 사각형) -->
+    <rect x="28"  y="62"  width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <rect x="130" y="62"  width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <rect x="28"  y="172" width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <rect x="130" y="172" width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <!-- 창문 십자 -->
+    <line x1="54"  y1="62"  x2="54"  y2="126" stroke="#180804" stroke-width="1"/>
+    <line x1="28"  y1="94"  x2="80"  y2="94"  stroke="#180804" stroke-width="1"/>
+    <line x1="156" y1="62"  x2="156" y2="126" stroke="#180804" stroke-width="1"/>
+    <line x1="130" y1="94"  x2="182" y2="94"  stroke="#180804" stroke-width="1"/>
+    <line x1="54"  y1="172" x2="54"  y2="236" stroke="#180804" stroke-width="1"/>
+    <line x1="28"  y1="204" x2="80"  y2="204" stroke="#180804" stroke-width="1"/>
+    <!-- 창문 희미한 붉은 빛 (안에서 새어나옴) -->
+    <rect x="29" y="63" width="24" height="30" fill="#601808" opacity="0.18"/>
+    <rect x="29" y="173" width="24" height="30" fill="#601808" opacity="0.12"/>
+
+    <!-- 창문 (우) -->
+    <rect x="618" y="62"  width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <rect x="720" y="62"  width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <rect x="618" y="172" width="52" height="64" fill="#0c0402" stroke="#201008" stroke-width="1.2"/>
+    <line x1="644" y1="62"  x2="644" y2="126" stroke="#180804" stroke-width="1"/>
+    <line x1="618" y1="94"  x2="670" y2="94"  stroke="#180804" stroke-width="1"/>
+    <line x1="644" y1="172" x2="644" y2="236" stroke="#180804" stroke-width="1"/>
+    <line x1="618" y1="204" x2="670" y2="204" stroke="#180804" stroke-width="1"/>
+    <rect x="645" y="63" width="24" height="30" fill="#601808" opacity="0.15"/>
+
+    <!-- 균열 -->
+    <path d="M252 0 Q250 60 254 120 Q251 190 248 280 Q252 300 250 320"
+          stroke="#2a1008" stroke-width="1.8" fill="none" opacity="0.7"/>
+    <path d="M548 0 Q550 60 546 120 Q549 190 552 280 Q548 300 550 320"
+          stroke="#2a1008" stroke-width="1.8" fill="none" opacity="0.7"/>
+
+    <!-- 압박 신호 (우상단 붉은 점멸) -->
+    <circle cx="712" cy="36" r="5.5" fill="#cc1818" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.1;0.9" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="5.5;9;5.5"   dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="712" cy="36" r="14" fill="none" stroke="#cc1818" stroke-width="0.8" opacity="0.4">
+      <animate attributeName="opacity" values="0.4;0;0.4"  dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="14;22;14"   dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <rect x="574" y="34" width="124" height="1" fill="#cc1818" opacity="0.45">
+      <animate attributeName="opacity" values="0.45;0.04;0.45" dur="1.5s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0" y="228" width="800" height="92" fill="url(#fd)"/>
+  `, _badge, _overlay);
+}
+
+function svgS3() {
+  const _badge = `제 3 장 · 분기`;
+  const _overlay = `<span class="ov-eye">제 3 장 · 분기</span><span class="ov-title">봉쇄된 광장</span>`;
+  return svgWrap(`${FADE}
+    <rect width="800" height="320" fill="#0c0402"/>
+    <!-- 광장 바닥 원근 -->
+    <polygon points="0,320 800,320 640,120 160,120" fill="#0e0503"/>
+    <!-- 바닥 타일 (원근선) -->
+    <line x1="400" y1="120" x2="0"   y2="320" stroke="#12121c" stroke-width="0.6"/>
+    <line x1="400" y1="120" x2="130" y2="320" stroke="#12121c" stroke-width="0.5"/>
+    <line x1="400" y1="120" x2="265" y2="320" stroke="#12121c" stroke-width="0.5"/>
+    <line x1="400" y1="120" x2="400" y2="320" stroke="#12121c" stroke-width="0.5"/>
+    <line x1="400" y1="120" x2="535" y2="320" stroke="#12121c" stroke-width="0.5"/>
+    <line x1="400" y1="120" x2="670" y2="320" stroke="#12121c" stroke-width="0.5"/>
+    <line x1="400" y1="120" x2="800" y2="320" stroke="#12121c" stroke-width="0.6"/>
+    <!-- 배경 건물 실루엣 -->
+    <rect x="0"   y="40" width="50"  height="80" fill="#120704"/>
+    <rect x="42"  y="20" width="36"  height="100" fill="#100604"/>
+    <rect x="72"  y="55" width="28"  height="65"  fill="#140804"/>
+    <rect x="694" y="55" width="28"  height="65"  fill="#140804"/>
+    <rect x="722" y="20" width="36"  height="100" fill="#100604"/>
+    <rect x="750" y="40" width="50"  height="80"  fill="#120704"/>
+    <!-- 레이저 격자 (회청색) -->
+    <line x1="160" y1="120" x2="0"   y2="320" stroke="#5a2a18" stroke-width="0.9" opacity="0.8"/>
+    <line x1="240" y1="120" x2="80"  y2="320" stroke="#5a2a18" stroke-width="0.65" opacity="0.55"/>
+    <line x1="320" y1="120" x2="200" y2="320" stroke="#5a2a18" stroke-width="0.65" opacity="0.55"/>
+    <line x1="400" y1="120" x2="320" y2="320" stroke="#5a2a18" stroke-width="0.65" opacity="0.55"/>
+    <line x1="480" y1="120" x2="450" y2="320" stroke="#5a2a18" stroke-width="0.65" opacity="0.55"/>
+    <line x1="560" y1="120" x2="580" y2="320" stroke="#5a2a18" stroke-width="0.65" opacity="0.55"/>
+    <line x1="640" y1="120" x2="720" y2="320" stroke="#5a2a18" stroke-width="0.9" opacity="0.8"/>
+    <!-- 수평 레이저 -->
+    <line x1="160" y1="120" x2="640" y2="120" stroke="#5a2a18" stroke-width="0.7" opacity="0.7"/>
+    <line x1="90"  y1="168" x2="710" y2="168" stroke="#5a2a18" stroke-width="0.5" opacity="0.45"/>
+    <line x1="30"  y1="228" x2="770" y2="228" stroke="#5a2a18" stroke-width="0.5" opacity="0.3"/>
+    <!-- 스캔 포인트 A — 수평 이동 -->
+    <circle r="3" fill="#d06018" opacity="0.95" filter="url(#blur2)">
+      <animate attributeName="cx" values="160;640;160" dur="3.2s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+      <animate attributeName="cy" values="120;120;120" dur="3.2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.95;0.3;0.95" dur="3.2s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 스캔 포인트 B — 역방향 -->
+    <circle r="2" fill="#d06018" opacity="0.6" filter="url(#blur2)">
+      <animate attributeName="cx" values="640;90;640" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1; 0.4 0 0.6 1"/>
+      <animate attributeName="cy" values="168;168;168" dur="4.8s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 분수대 중앙 -->
+    <ellipse cx="400" cy="268" rx="72" ry="16" fill="#0c0c1a" stroke="#1e0a06" stroke-width="0.5"/>
+    <rect x="394" y="185" width="12" height="86" fill="#160704"/>
+    <ellipse cx="400" cy="183" rx="18" ry="5" fill="#1a0804"/>
+    <rect x="0" y="215" width="800" height="105" fill="url(#fd)"/>
+  `, `제 3 장 · 분기`, `<span class="ov-eye">제 3 장 · 분기</span><span class="ov-title">봉쇄된 광장</span>`);
+}
+
+/* ─────────────────────────────────────────
+   S4 · 관리자 접근
+   — 기둥 공간 + 홀로그램 스캔라인 애니메이션
+   ───────────────────────────────────────── */
+function svgS4() {
+  const _badge = `제 4 장 · 위기`;
+  const _overlay = `<span class="ov-eye">제 4 장 · 위기</span><span class="ov-title">관리자와의 대면</span>`;
+  return svgWrap(`${FADE}
+    <defs>
+      <linearGradient id="gh" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#5a2a18" stop-opacity="0"/>
+        <stop offset="25%"  stop-color="#7a5e38" stop-opacity="0.55"/>
+        <stop offset="75%"  stop-color="#7a5e38" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#5a2a18" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <rect width="800" height="320" fill="#0e0503"/>
+    <!-- 천장 라인 -->
+    <rect x="0" y="0" width="800" height="18" fill="#120503"/>
+    <line x1="0" y1="18" x2="800" y2="18" stroke="#1c0804" stroke-width="0.8"/>
+    <!-- 바닥 -->
+    <rect x="0" y="288" width="800" height="32" fill="#090910"/>
+    <line x1="0" y1="288" x2="800" y2="288" stroke="#1c0804" stroke-width="0.8"/>
+    <!-- 기둥 (굵고 선명하게) -->
+    <rect x="62"  y="18" width="28" height="270" fill="#160804"/>
+    <rect x="64"  y="18" width="2"  height="270" fill="#200c06" opacity="0.6"/>
+    <rect x="86"  y="18" width="2"  height="270" fill="#200c06" opacity="0.4"/>
+    <rect x="210" y="18" width="22" height="270" fill="#0d0d1c"/>
+    <rect x="568" y="18" width="22" height="270" fill="#0d0d1c"/>
+    <rect x="710" y="18" width="28" height="270" fill="#160804"/>
+    <rect x="710" y="18" width="2"  height="270" fill="#200c06" opacity="0.6"/>
+    <rect x="734" y="18" width="2"  height="270" fill="#200c06" opacity="0.4"/>
+    <!-- 기둥 디테일 밴드 -->
+    <rect x="62"  y="90"  width="28" height="5" fill="#181832"/>
+    <rect x="62"  y="210" width="28" height="5" fill="#181832"/>
+    <rect x="710" y="90"  width="28" height="5" fill="#181832"/>
+    <rect x="710" y="210" width="28" height="5" fill="#181832"/>
+    <rect x="210" y="90"  width="22" height="4" fill="#1c0804"/>
+    <rect x="568" y="90"  width="22" height="4" fill="#1c0804"/>
+    <!-- 원근 소실선 (천장) -->
+    <line x1="90"  y1="18" x2="400" y2="80" stroke="#111128" stroke-width="0.5"/>
+    <line x1="710" y1="18" x2="400" y2="80" stroke="#111128" stroke-width="0.5"/>
+    <!-- 홀로그램 패널 -->
+    <rect x="260" y="28" width="280" height="248" fill="#0b1018" stroke="#3a1a08" stroke-width="0.7"/>
+    <!-- 패널 내부 수직 그리드 -->
+    <line x1="308" y1="28" x2="308" y2="276" stroke="#261008" stroke-width="0.4" opacity="0.6"/>
+    <line x1="356" y1="28" x2="356" y2="276" stroke="#261008" stroke-width="0.4" opacity="0.5"/>
+    <line x1="400" y1="28" x2="400" y2="276" stroke="#261008" stroke-width="0.4" opacity="0.5"/>
+    <line x1="444" y1="28" x2="444" y2="276" stroke="#261008" stroke-width="0.4" opacity="0.5"/>
+    <line x1="492" y1="28" x2="492" y2="276" stroke="#261008" stroke-width="0.4" opacity="0.6"/>
+    <!-- 스캔라인 (핵심 애니메이션) -->
+    <rect x="260" y="0" width="280" height="2.5" fill="url(#gh)">
+      <animateTransform attributeName="transform" type="translate"
+        values="0,28;0,274;0,28" dur="2.6s" repeatCount="indefinite"
+        calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+      <animate attributeName="opacity" values="1;0.25;1" dur="2.6s" repeatCount="indefinite"/>
+    </rect>
+    <!-- 스캔라인 후광 -->
+    <rect x="260" y="0" width="280" height="14" fill="url(#gh)" opacity="0.18" filter="url(#blur5)">
+      <animateTransform attributeName="transform" type="translate"
+        values="0,28;0,274;0,28" dur="2.6s" repeatCount="indefinite"
+        calcMode="spline" keySplines="0.5 0 0.5 1; 0.5 0 0.5 1"/>
+    </rect>
+    <!-- KEY 아이콘 (하단) -->
+    <rect x="358" y="240" width="84" height="24" rx="3" fill="none" stroke="#3a1a08" stroke-width="0.7" opacity="0.6"/>
+    <circle cx="380" cy="252" r="5.5" fill="none" stroke="#3a1a08" stroke-width="0.7" opacity="0.6"/>
+    <line x1="386" y1="252" x2="432" y2="252" stroke="#3a1a08" stroke-width="0.7" opacity="0.6"/>
+    <line x1="418" y1="252" x2="418" y2="260" stroke="#3a1a08" stroke-width="0.7" opacity="0.6"/>
+    <!-- 경고 라인 (양쪽) -->
+    <rect x="90"  y="0" width="1.2" height="288" fill="#7a5e38" opacity="0.18">
+      <animate attributeName="opacity" values="0.18;0.03;0.18" dur="3.0s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="710" y="0" width="1.2" height="288" fill="#7a5e38" opacity="0.18">
+      <animate attributeName="opacity" values="0.18;0.04;0.18" dur="2.4s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="0" y="220" width="800" height="100" fill="url(#fd)"/>
+  `, `제 4 장 · 위기`, `<span class="ov-eye">제 4 장 · 위기</span><span class="ov-title">관리자와의 대면</span>`);
+}
+
+/* ─────────────────────────────────────────
+   S5 · 최종 코어 — 저울 + 코어 점멸
+   ───────────────────────────────────────── */
+function svgS5() {
+  const _badge = `제 5 장 · 절정`;
+  const _overlay = `<span class="ov-eye">제 5 장 · 절정</span><span class="ov-title">저울의 심판</span>`;
+  return svgWrap(`${FADE}
+    <defs>
+      <linearGradient id="pillarG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#1e0e06"/>
+        <stop offset="40%"  stop-color="#301408"/>
+        <stop offset="60%"  stop-color="#220e06"/>
+        <stop offset="100%" stop-color="#141c28"/>
+      </linearGradient>
+      <linearGradient id="armG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#7a3820"/>
+        <stop offset="100%" stop-color="#2a4058"/>
+      </linearGradient>
+      <linearGradient id="dishG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#220e06"/>
+        <stop offset="100%" stop-color="#0e161e"/>
+      </linearGradient>
+      <linearGradient id="baseG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#1a2430"/>
+        <stop offset="100%" stop-color="#140603"/>
+      </linearGradient>
+      <filter id="coreGlow">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <rect width="800" height="320" fill="#0c0402"/>
+
+    <!-- 배경 도시 실루엣 (아주 희미) -->
+    <rect x="0"   y="180" width="120" height="140" fill="#100604" opacity="0.4"/>
+    <rect x="100" y="155" width="80"  height="165" fill="#090910" opacity="0.4"/>
+    <rect x="580" y="155" width="80"  height="165" fill="#090910" opacity="0.4"/>
+    <rect x="640" y="180" width="160" height="140" fill="#100604" opacity="0.4"/>
+
+    <!-- 코어 후광 (배경) -->
+    <circle cx="400" cy="52" r="45" fill="#2a1e10" opacity="0.12" filter="url(#blur8)">
+      <animate attributeName="opacity" values="0.12;0.04;0.12" dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+
+    <!-- ── 저울 기둥 (중앙) ── -->
+    <!-- 기둥 몸체 -->
+    <rect x="392" y="72" width="16" height="168" fill="url(#pillarG)" rx="2"/>
+    <!-- 기둥 하이라이트 -->
+    <rect x="393" y="72" width="2" height="168" fill="#3a5070" opacity="0.5" rx="1"/>
+    <!-- 기둥 상단 캡 -->
+    <rect x="382" y="66" width="36" height="10" fill="url(#armG)" rx="2"/>
+    <rect x="386" y="64" width="28" height="4"  fill="#5a7898" rx="1"/>
+
+    <!-- ── 저울 코어 (피벗 포인트) ── -->
+    <circle cx="400" cy="52" r="9" fill="#2e1408" stroke="#c05820" stroke-width="1.2"/>
+    <circle cx="400" cy="52" r="5" fill="#9a4818" opacity="0.9">
+      <animate attributeName="opacity" values="0.9;0.25;0.9" dur="2.4s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="5;7;5"         dur="2.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="52" r="2.5" fill="#7ab4d4"/>
+
+    <!-- ── 저울대 ── -->
+    <!-- 저울대 본체 (약간 기울어짐 없이 수평) -->
+    <rect x="188" y="96" width="424" height="7" fill="url(#armG)" rx="3"/>
+    <!-- 저울대 상단 하이라이트 -->
+    <rect x="188" y="96" width="424" height="2" fill="#6a8aaa" opacity="0.5" rx="1"/>
+    <!-- 중앙 피벗 연결부 -->
+    <rect x="394" y="86" width="12" height="18" fill="#6a3020" rx="1"/>
+
+    <!-- ── 왼쪽 체인 + 접시 ── -->
+    <!-- 체인 (3줄) -->
+    <line x1="218" y1="103" x2="198" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <line x1="228" y1="103" x2="218" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <line x1="238" y1="103" x2="238" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <!-- 체인 링 디테일 -->
+    <circle cx="208" cy="122" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="213" cy="138" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="218" cy="154" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <!-- 접시 테두리 (두껍고 선명) -->
+    <ellipse cx="218" cy="168" rx="72" ry="8" fill="url(#armG)" stroke="#5a8aaa" stroke-width="0.8"/>
+    <!-- 접시 그릇 깊이 -->
+    <ellipse cx="218" cy="170" rx="68" ry="5" fill="url(#dishG)"/>
+    <!-- 접시 하이라이트 -->
+    <ellipse cx="205" cy="166" rx="28" ry="3" fill="#6a3020" opacity="0.4"/>
+    <!-- 접시 반사 -->
+    <ellipse cx="218" cy="165" rx="70" ry="2" fill="#c05820" opacity="0.15"/>
+    <!-- INTEGRITY 레이블 -->
+    <text x="218" y="190" text-anchor="middle"
+          fill="#c05820" font-size="8.5"
+          font-family="DM Mono, monospace"
+          letter-spacing="2" opacity="0.75">INTEGRITY</text>
+
+    <!-- ── 오른쪽 체인 + 접시 ── -->
+    <line x1="562" y1="103" x2="562" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <line x1="572" y1="103" x2="582" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <line x1="582" y1="103" x2="602" y2="162" stroke="#5a2818" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="572" cy="122" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="577" cy="138" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="582" cy="154" r="2" fill="none" stroke="#7a3820" stroke-width="0.8" opacity="0.5"/>
+    <ellipse cx="582" cy="168" rx="72" ry="8" fill="url(#armG)" stroke="#5a8aaa" stroke-width="0.8"/>
+    <ellipse cx="582" cy="170" rx="68" ry="5" fill="url(#dishG)"/>
+    <ellipse cx="569" cy="166" rx="28" ry="3" fill="#6a3020" opacity="0.4"/>
+    <ellipse cx="582" cy="165" rx="70" ry="2" fill="#c05820" opacity="0.15"/>
+    <text x="582" y="190" text-anchor="middle"
+          fill="#c05820" font-size="8.5"
+          font-family="DM Mono, monospace"
+          letter-spacing="2" opacity="0.75">SYNC</text>
+
+    <!-- ── 기둥 받침대 ── -->
+    <!-- 받침 기둥 -->
+    <rect x="395" y="240" width="10" height="42" fill="url(#pillarG)"/>
+    <!-- 받침 단 1 -->
+    <rect x="374" y="240" width="52" height="7" fill="url(#baseG)" rx="1"/>
+    <rect x="375" y="240" width="50" height="2" fill="#5a2818" opacity="0.4" rx="1"/>
+    <!-- 받침 단 2 -->
+    <rect x="358" y="247" width="84" height="7" fill="url(#baseG)" rx="1"/>
+    <!-- 받침 단 3 (가장 넓음) -->
+    <rect x="338" y="254" width="124" height="9" fill="url(#baseG)" rx="2"/>
+    <rect x="339" y="254" width="122" height="2" fill="#5a2818" opacity="0.3" rx="1"/>
+    <!-- 받침 하단 -->
+    <ellipse cx="400" cy="268" rx="64" ry="6" fill="#140703" stroke="#2a3a4e" stroke-width="0.6"/>
+
+    <!-- 경고 점멸 라인 -->
+    <rect x="310" y="290" width="180" height="1" fill="#c05820" opacity="0.4">
+      <animate attributeName="opacity" values="0.4;0.06;0.4" dur="1.6s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0" y="205" width="800" height="115" fill="url(#fd)"/>
+  `)
+}
+
+/* ─────────────────────────────────────────
+   END_A · 혁명가형
+   — 균열 + 빛 + 도시 실루엣 + 검
+   ───────────────────────────────────────── */
+function svgEndA() {
+  const _badge = `결말 A`;
+  const _overlay = `<span class="ov-eye">결말 A</span><span class="ov-title">혁명가의 도시</span>`;
+  return svgWrap(`${FADE}
+    <rect width="800" height="320" fill="#0c0503"/>
+    <!-- 어두운 새벽빛 (지평선) -->
+    <ellipse cx="400" cy="285" rx="500" ry="80" fill="#121828" opacity="0.7"/>
+    <ellipse cx="400" cy="298" rx="300" ry="50" fill="#182030" opacity="0.55"/>
+    <!-- 도시 실루엣 -->
+    <rect x="0"   y="190" width="55"  height="130" fill="#140804" opacity="0.75"/>
+    <rect x="48"  y="165" width="45"  height="155" fill="#120704" opacity="0.75"/>
+    <rect x="165" y="148" width="80"  height="172" fill="#100604" opacity="0.75"/>
+    <rect x="350" y="135" width="100" height="185" fill="#0e0503" opacity="0.75"/>
+    <rect x="560" y="148" width="80"  height="172" fill="#100604" opacity="0.75"/>
+    <rect x="708" y="165" width="45"  height="155" fill="#120704" opacity="0.75"/>
+    <rect x="748" y="190" width="52"  height="130" fill="#140804" opacity="0.75"/>
+    <!-- 균열 (중앙, 빛 새어나옴) -->
+    <line x1="400" y1="320" x2="378" y2="40" stroke="#9a4818" stroke-width="2"   opacity="0.5"/>
+    <line x1="400" y1="320" x2="422" y2="40" stroke="#9a4818" stroke-width="1.5" opacity="0.35"/>
+    <line x1="400" y1="320" x2="358" y2="80" stroke="#9a4818" stroke-width="1"   opacity="0.2"/>
+    <line x1="400" y1="320" x2="442" y2="80" stroke="#9a4818" stroke-width="1"   opacity="0.2"/>
+    <ellipse cx="400" cy="180" rx="16" ry="130" fill="#5a3a18" opacity="0.06" filter="url(#blur8)"/>
+    <!-- 검 (우측, 세워진) -->
+    <line x1="620" y1="140" x2="620" y2="310" stroke="#8a9aaa" stroke-width="4" stroke-linecap="round"/>
+    <line x1="619" y1="148" x2="619" y2="300" stroke="#c8d8e8" stroke-width="1" opacity="0.5"/>
+    <line x1="600" y1="156" x2="640" y2="156" stroke="#7a8a98" stroke-width="4.5" stroke-linecap="round"/>
+    <rect x="616" y="156" width="8" height="28" rx="2" fill="#5a6a78"/>
+    <ellipse cx="620" cy="186" rx="7" ry="5" fill="#6a7a88"/>
+    <!-- 검 빛반사 -->
+    <line x1="620" y1="145" x2="620" y2="295" stroke="#c05820" stroke-width="1" opacity="0.12" filter="url(#blur2)"/>
+    <!-- 시민 점들 -->
+    <circle cx="180" cy="308" r="2.5" fill="#6a8098" opacity="0.5"/>
+    <circle cx="240" cy="312" r="2"   fill="#6a8098" opacity="0.42"/>
+    <circle cx="300" cy="306" r="2.5" fill="#6a8098" opacity="0.5"/>
+    <circle cx="360" cy="310" r="2"   fill="#6a8098" opacity="0.42"/>
+    <circle cx="440" cy="310" r="2"   fill="#6a8098" opacity="0.42"/>
+    <circle cx="500" cy="306" r="2.5" fill="#6a8098" opacity="0.5"/>
+    <circle cx="560" cy="312" r="2"   fill="#6a8098" opacity="0.42"/>
+    <!-- 창문 불빛 (켜진 것들) -->
+    <rect x="178" y="158" width="4" height="6" fill="#c86020" opacity="0.5"/>
+    <rect x="215" y="172" width="3" height="5" fill="#c86020" opacity="0.4"/>
+    <rect x="565" y="158" width="4" height="6" fill="#c86020" opacity="0.5"/>
+    <rect x="600" y="172" width="3" height="5" fill="#c86020" opacity="0.4"/>
+    <rect x="0" y="245" width="800" height="75" fill="url(#fd)"/>
+  `, `제 5 장 · 절정`, `<span class="ov-eye">제 5 장 · 절정</span><span class="ov-title">저울의 심판</span>`, `결말 A`, `<span class="ov-eye">결말 A</span><span class="ov-title">혁명가의 도시</span>`);
+}
+
+/* ─────────────────────────────────────────
+   END_B · 인간성 회복
+   — 조용한 탑 + 따뜻한 코어 + 시민들
+   ───────────────────────────────────────── */
+function svgEndB() {
+  const _badge = `결말 B`;
+  const _overlay = `<span class="ov-eye">결말 B</span><span class="ov-title">인간성의 회복</span>`;
+  return svgWrap(`${FADE}
+    <rect width="800" height="320" fill="#0e0504"/>
+    <!-- 새벽 따뜻한 빛 (아주 희미하게) -->
+    <ellipse cx="400" cy="290" rx="480" ry="100" fill="#1a1208" opacity="0.55"/>
+    <ellipse cx="400" cy="305" rx="280" ry="60"  fill="#221808" opacity="0.4"/>
+    <!-- 도시 실루엣 -->
+    <rect x="0"   y="195" width="55"  height="125" fill="#120503" opacity="0.7"/>
+    <rect x="48"  y="172" width="42"  height="148" fill="#100604" opacity="0.7"/>
+    <rect x="168" y="155" width="78"  height="165" fill="#100403" opacity="0.7"/>
+    <rect x="560" y="155" width="78"  height="165" fill="#100403" opacity="0.7"/>
+    <rect x="710" y="172" width="42"  height="148" fill="#100604" opacity="0.7"/>
+    <rect x="745" y="195" width="55"  height="125" fill="#120503" opacity="0.7"/>
+    <!-- 탑 -->
+    <rect x="388" y="78" width="24" height="242" fill="#180804"/>
+    <rect x="378" y="70" width="44" height="14"  fill="#1c0a06"/>
+    <!-- 코어 (따뜻한 세이지 빛) -->
+    <circle cx="400" cy="64" r="7" fill="#4a9060" opacity="0.65">
+      <animate attributeName="opacity" values="0.65;0.88;0.65" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="7;10;7"          dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="64" r="26" fill="#386a48" opacity="0.1" filter="url(#blur8)"/>
+    <!-- 시민들 (따뜻한 점들) -->
+    <circle cx="180" cy="312" r="2.5" fill="#c07030" opacity="0.55"/>
+    <circle cx="230" cy="316" r="2"   fill="#c07030" opacity="0.48"/>
+    <circle cx="285" cy="310" r="2.5" fill="#c07030" opacity="0.55"/>
+    <circle cx="340" cy="314" r="2"   fill="#c07030" opacity="0.48"/>
+    <circle cx="460" cy="314" r="2"   fill="#c07030" opacity="0.48"/>
+    <circle cx="515" cy="310" r="2.5" fill="#c07030" opacity="0.55"/>
+    <circle cx="570" cy="316" r="2"   fill="#c07030" opacity="0.48"/>
+    <circle cx="620" cy="312" r="2.5" fill="#c07030" opacity="0.55"/>
+    <!-- 창문 불빛 (따뜻하게) -->
+    <rect x="180" y="165" width="4" height="5" fill="#a85018" opacity="0.5"/>
+    <rect x="215" y="178" width="3" height="5" fill="#a85018" opacity="0.4"/>
+    <rect x="245" y="168" width="4" height="5" fill="#a85018" opacity="0.45"/>
+    <rect x="565" y="165" width="4" height="5" fill="#a85018" opacity="0.5"/>
+    <rect x="598" y="178" width="3" height="5" fill="#a85018" opacity="0.4"/>
+    <rect x="628" y="168" width="4" height="5" fill="#a85018" opacity="0.45"/>
+    <rect x="0" y="248" width="800" height="72" fill="url(#fd)"/>
+  `, `결말 B`, `<span class="ov-eye">결말 B</span><span class="ov-title">인간성의 회복</span>`);
+}
+
+/* ─────────────────────────────────────────
+   BAD END · 도시가 정지했다
+   — 꺼지는 도시 + 짙은 안개
+   ───────────────────────────────────────── */
+function svgBad() {
+  const _badge = `파국`;
+  const _overlay = `<span class="ov-eye">파국</span><span class="ov-title">도시가 정지했다</span>`;
+  return svgWrap(`${FADE}
+    <defs>
+      <radialGradient id="badsky" cx="50%" cy="40%" r="55%">
+        <stop offset="0%"   stop-color="#0c0a0e"/>
+        <stop offset="100%" stop-color="#08030100"/>
+      </radialGradient>
+      <radialGradient id="badcore" cx="50%" cy="50%" r="50%">
+        <stop offset="0%"   stop-color="#2a1a1a" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#08030100" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="badmist" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#08030100" stop-opacity="0"/>
+        <stop offset="50%"  stop-color="#0c0402" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#08030100" stop-opacity="1"/>
+      </linearGradient>
+      <filter id="badblur"><feGaussianBlur stdDeviation="4"/></filter>
+    </defs>
+
+    <rect width="800" height="320" fill="url(#badsky)"/>
+
+    <!-- ── 배경 건물 (레이어1, 아주 희미 — 사라지는 중) ── -->
+    <rect x="0"   y="210" width="40"  height="110" fill="#0e0504" opacity="0.35"/>
+    <rect x="35"  y="192" width="30"  height="128" fill="#0c0503" opacity="0.35"/>
+    <rect x="95"  y="185" width="45"  height="135" fill="#06060e" opacity="0.35"/>
+    <rect x="185" y="172" width="55"  height="148" fill="#060610" opacity="0.35"/>
+    <rect x="268" y="180" width="38"  height="140" fill="#0c0503" opacity="0.35"/>
+    <rect x="494" y="180" width="38"  height="140" fill="#0c0503" opacity="0.35"/>
+    <rect x="560" y="172" width="55"  height="148" fill="#060610" opacity="0.35"/>
+    <rect x="660" y="185" width="45"  height="135" fill="#06060e" opacity="0.35"/>
+    <rect x="735" y="192" width="30"  height="128" fill="#0c0503" opacity="0.35"/>
+    <rect x="760" y="210" width="40"  height="110" fill="#0e0504" opacity="0.35"/>
+
+    <!-- ── 앞 건물 (레이어2, 더 진하게) ── -->
+    <rect x="0"   y="228" width="58"  height="92"  fill="#120503"/>
+    <rect x="52"  y="208" width="44"  height="112" fill="#090912"/>
+    <rect x="90"  y="218" width="32"  height="102" fill="#130503"/>
+    <rect x="178" y="195" width="62"  height="125" fill="#0e0503"/>
+    <rect x="234" y="210" width="40"  height="110" fill="#090912"/>
+    <!-- 중앙 탑 양쪽 빌딩 -->
+    <rect x="288" y="190" width="50"  height="130" fill="#0e0503"/>
+    <rect x="462" y="190" width="50"  height="130" fill="#0e0503"/>
+    <!-- 오른쪽 -->
+    <rect x="526" y="210" width="40"  height="110" fill="#090912"/>
+    <rect x="560" y="195" width="62"  height="125" fill="#0e0503"/>
+    <rect x="678" y="218" width="32"  height="102" fill="#130503"/>
+    <rect x="704" y="208" width="44"  height="112" fill="#090912"/>
+    <rect x="742" y="228" width="58"  height="92"  fill="#120503"/>
+
+    <!-- ── 꺼진 창문들 (모두 암흑) ── -->
+    <rect x="60"  y="215" width="5" height="7" fill="#120603" opacity="0.6"/>
+    <rect x="72"  y="228" width="4" height="6" fill="#0c0c12" opacity="0.5"/>
+    <rect x="100" y="224" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="192" y="202" width="5" height="7" fill="#0c0c12" opacity="0.55"/>
+    <rect x="210" y="218" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="300" y="198" width="5" height="7" fill="#0c0c12" opacity="0.55"/>
+    <rect x="318" y="210" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="482" y="198" width="5" height="7" fill="#0c0c12" opacity="0.55"/>
+    <rect x="498" y="210" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="574" y="202" width="5" height="7" fill="#0c0c12" opacity="0.55"/>
+    <rect x="592" y="218" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="696" y="224" width="4" height="6" fill="#120603" opacity="0.5"/>
+    <rect x="716" y="215" width="5" height="7" fill="#0c0c12" opacity="0.55"/>
+
+    <!-- ── 탑 (중앙, 코어 꺼짐) ── -->
+    <!-- 탑 기단 -->
+    <rect x="340" y="188" width="120" height="132" fill="#100604"/>
+    <rect x="330" y="238" width="140" height="8"   fill="#140804"/>
+    <rect x="318" y="262" width="164" height="8"   fill="#0c0c1a"/>
+    <rect x="306" y="282" width="188" height="38"  fill="#140503"/>
+    <!-- 탑 기둥 -->
+    <rect x="386" y="55" width="28" height="138" fill="#0c0c1c"/>
+    <rect x="376" y="46" width="48" height="12"  fill="#140703"/>
+    <rect x="384" y="38" width="32" height="10"  fill="#0c0c1c"/>
+    <!-- 탑 꼭대기 크라운 -->
+    <rect x="390" y="28" width="20" height="12"  fill="#140703"/>
+
+    <!-- ── 꺼진 코어 (죽어가는 빛) ── -->
+    <!-- 마지막 잔광 -->
+    <circle cx="400" cy="22" r="18" fill="#1a0a0a" opacity="0.4" filter="url(#badblur)">
+      <animate attributeName="opacity" values="0.4;0.05;0.4" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="22" r="5" fill="#2a1010" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.05;0.3;0.05;0.5" dur="5s" repeatCount="indefinite"/>
+      <animate attributeName="r"       values="5;3;5;2;5"              dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <!-- 꺼진 코어 중심 -->
+    <circle cx="400" cy="22" r="2.5" fill="#1a0808" opacity="0.7"/>
+
+    <!-- ── 안개 (도시를 서서히 삼킴) ── -->
+    <rect x="0" y="0"   width="800" height="320" fill="url(#badmist)"/>
+    <!-- 추가 짙은 안개층 -->
+    <ellipse cx="200" cy="260" rx="280" ry="80" fill="#08030100" opacity="0.55"/>
+    <ellipse cx="600" cy="270" rx="260" ry="70" fill="#08030100" opacity="0.55"/>
+    <ellipse cx="400" cy="300" rx="400" ry="60" fill="#08030100" opacity="0.7"/>
+
+    <!-- ── 정지 신호 (중앙 하단) ── -->
+    <rect x="360" y="295" width="80" height="1" fill="#3a1818" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;0.05;0.5" dur="3s" repeatCount="indefinite"/>
+    </rect>
+
+    <rect x="0" y="210" width="800" height="110" fill="url(#fd)"/>
+  `, `파국`, `<span class="ov-eye">파국</span><span class="ov-title">도시가 정지했다</span>`);
+}
+
+/* ── 씬 조립 ── */
+function scene(imgKey,eye,titleH,place,cond,narr,choices){
+  return `<div class="scene-in">
+    ${imgBlock(imgKey)}
+    <div class="s-body">
+      <p class="s-eye">${eye}</p>
+      <h2 class="s-title">${titleH}</h2>
+      <p class="s-place">${place}</p>
+      ${cond?`<div class="cond">${cond}</div>`:''}
+      <div class="narr">${narr}</div>
+      <div class="rule"></div>
+      <div class="choices"><p class="c-head">선택</p>${choices}</div>
+    </div>
+  </div>`;
+}
+
+function ending(imgKey,tag,cls,titleTxt,body){
+  return `<div class="scene-in">
+    ${imgBlock(imgKey)}
+    <div class="s-body">
+      <div class="end-wrap">
+        <p class="end-tag">${tag}</p>
+        <h2 class="end-title ${cls}">${titleTxt}</h2>
+        <p class="end-text">${body}</p>
+        <div class="end-stats">
+          <div class="es"><span class="esl">INTEGRITY</span><span class="esv" style="color:var(--sage)">${G.i}</span></div>
+          <div class="es"><span class="esl">SYNC</span><span class="esv" style="color:var(--slate)">${G.s}</span></div>
+          <div class="es"><span class="esl">NOISE</span><span class="esv" style="color:var(--crimson)">${G.n}</span></div>
+        </div>
+        <button class="restart-btn" onclick="restartGame()">↩ 다시 시작</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════
+   씬 함수
+══════════════════════ */
+function sceneS1(){
+  const narr=`
+    <p class="sd">[ STATUS : ISOLATED ] — 탑 꼭대기. 도시의 신음 소리가 멀리서 울려온다.<br>왕자의 심장부, 녹슨 코어가 느리게 명멸한다.</p>
+    <div class="dlg"><span class="spk pr">Prince</span><p class="line">"이제 더는 지켜보지 않는다. 움직여야 한다."</p></div>
+    <div class="dlg"><span class="spk pr">Prince</span><p class="line">"저 아래에서 무언가 무너지고 있다. 나는 그것을 느낀다."</p></div>
+    <p class="sd">[ T-MINUS : 첫 개입 ] — 도시 신음 소리가 한층 가까워진다.</p>`;
+  const ch_=btn('A','직접 개입','시민에게 직접 손을 내민다','Sync +20 · Noise +5',"cs1('A')")
+           +btn('B','관찰 축적','먼저 도시의 흐름을 읽는다','Integrity +20',"cs1('B')");
+  render(scene('s1','Scene 01 / 기(起) — 각성','<em>탑 관측</em>','황혼빛 도시 · 왕자의 코어 점멸 · Init : I = 0 / S = 0','',narr,ch_));
+}
+function cs1(c){c==='A'?(ch('s',20),ch('n',5)):ch('i',20);go(sceneS2);}
+
+function sceneS2(){
+  let cond='';
+  if(G.s>=20)cond+='[ Sync ≥ 20 ] &nbsp;균열 가시화 — 시스템 틈새가 열리기 시작한다.<br>';
+  if(G.i>=15)cond+='[ Integrity ≥ 15 ] &nbsp;시민 호감 — 한 노인이 눈을 마주친다.';
+  const narr=`
+    <p class="sd">골목 깊숙이 균열이 열려있다. 제비 한 마리가 금빛 잔상을 남기며 부유한다.</p>
+    <div class="dlg"><span class="spk sw">Swallow</span><p class="line">"너의 선택은 아직 '순수'해. 길을 알려줄까?"</p></div>
+    <div class="dlg"><span class="spk pr">Prince</span><p class="line">"...시간이 별로 없다."</p></div>
+    <p class="sd">관리자의 압박 신호가 골목 끝에서 점멸한다.</p>`;
+  const ch_=btn('A','직접 개입','관리자에 맞서 시민 앞에 선다','Sync +15 · S2A = false',"cs2('A')")
+           +btn('B','정보 수집','제비의 말을 따라 조용히 정보를 모은다','Integrity +12 · S2A = true',"cs2('B')");
+  render(scene('s2','Scene 02 / 승(承) — 전개','<em>거리 그림자</em>','어두운 골목 · 시민 외침과 관리자 압박 신호가 교차한다',cond,narr,ch_));
+}
+function cs2(c){c==='A'?(ch('s',15),G.s2a=false):(ch('i',12),G.s2a=true);hud();go(sceneS3);}
+
+function sceneS3(){
+  let cond='';
+  if(G.s2a) cond+='[ S2A = true ] &nbsp;제비가 먼저 말을 건다 — "격자 사이 틈이 있어."<br>';
+  if(G.n>=20)cond+='[ Noise ≥ 20 ] &nbsp;PZ 추격 드론 감지 — 스캔 레이저가 광장을 훑는다.';
+  const narr=`
+    <p class="sd">광장 전체를 붉은 스캔 레이저가 격자처럼 가로막는다.</p>
+    <div class="dlg"><span class="spk pz">PZ</span><p class="line">"개입 로그 감지. 격리 프로토콜 실행. 5초 전."</p></div>
+    <div class="dlg"><span class="spk sw">Swallow</span><p class="line">"신뢰해준다면, 길을 찾겠습니다."</p></div>
+    <div class="dlg"><span class="spk pr">Prince</span><p class="line">"제비... 네가 옳다면 나는 믿겠다."</p></div>`;
+  const ch_=btn('A','제비 협력','제비의 안내를 따라 레이저 격자를 통과한다','Integrity +18 · S3A = true',"cs3('A')")
+           +btn('B','독자 돌파','혼자 해킹으로 격자를 강제 돌파한다','Sync +18 · S3A = false',"cs3('B')");
+  render(scene('s3','Scene 03 / 승(承) — 핵심 분기','<em>금빛 광장</em>','PZ 드론 레이저 격자 · 나노 제비 드론이 선회한다',cond,narr,ch_));
+}
+function cs3(c){c==='A'?(ch('i',18),G.s3a=true):(ch('s',18),G.s3a=false);hud();go(sceneS4);}
+
+function sceneS4(){
+  let cond='';
+  if(G.s3a)      cond+='[ S3A = true ] &nbsp;제비 가이드 — "저 기둥 뒤 홀로그램이 진짜 관리자야."<br>';
+  if(G.i+G.s<20) cond+='[ 합산 &lt; 20 ] &nbsp;경고음 — 시스템이 이상 접근을 감지한다.';
+  const narr=`
+    <p class="sd">홀로그램 속 관리자가 모습을 드러낸다. 그 뒤로 선녀의 실루엣이 흐릿하게 겹쳐 보인다.</p>
+    <div class="dlg"><span class="spk mg">Manager</span><p class="line">"너의 흔적은 시스템을 오염시킨다. 순응하라."</p></div>
+    <div class="dlg"><span class="spk pr">Prince</span><p class="line">"이 고통을 외면할 수 없다. 차가운 질서여도 눈물은 흐른다."</p></div>
+    <p class="sd">Key를 확보해야 S5 승리 조건이 완화된다.</p>`;
+  const ch_=btn('A','매수 시도','뇌물로 관리자를 매수한다 — Key를 잃는다','Integrity −12 · Key = false',"cs4('A')",true)
+           +btn('B','해킹 돌입','시스템을 강제 해킹한다','Sync +16 · Key = true',"cs4('B')")
+           +btn('C','설득',G.i>=40?'높은 Integrity로 관리자를 설득한다':'설득 시도 — Integrity ≥ 40 권장','Integrity +10 · Sync +5 · Key = true',"cs4('C')");
+  render(scene('s4','Scene 04 / 전(轉) — 위기','<em>관리자 접근</em>','금속 기둥 · 홀로그램 벽 · 청백색 아우라 대치',cond,narr,ch_));
+}
+function cs4(c){
+  if(c==='A'){ch('i',-12);G.key=false;}
+  if(c==='B'){ch('s',16);G.key=true;}
+  if(c==='C'){ch('i',10);ch('s',5);G.key=true;}
+  hud();go(sceneS5);
+}
+
+function sceneS5(){
+  const thr=G.key?30:38;
+  const ok=(G.i>=thr||G.s>=thr);
+  const sub=G.key?'Key = true → I ≥ 30 or S ≥ 30':'Key = false → I ≥ 38 or S ≥ 38';
+  const narr=`
+    <div class="dlg"><span class="spk fy">Fairy</span><p class="line">"네 선택의 무게를 재어보겠다."</p></div>
+    <div class="dlg"><span class="spk pz">PZ</span><p class="line">"개입 로그 총 ${G.i+G.s}점. 임계치 ${thr*2}점."</p></div>
+    <p class="sd">저울이 기울기 시작한다. 왕자의 코어가 최대 명도로 점멸한다.</p>`;
+  const warn=!ok?`<div class="warn-b">[ Warning ] 현재 수치 부족 — 승리 조건 미달.</div>`:'';
+  const ch_=(ok
+    ?btn('→','코어 이동 — 승리 확정',`Integrity ${G.i} / Sync ${G.s} → 조건 충족`,'S6으로 진행',"cs5('win')")
+    :btn('→','코어 이동 — 승리 시도',`Integrity ${G.i} / Sync ${G.s} → 조건 미달`,'실패 가능성 높음',"cs5('win')",true))
+  +btn('G','도박','모든 것을 걸고 50% 확률에 도전한다','Sync −10 · 50% 성공/실패',"cs5('gamble')",true)
+  +btn('↩B','S4 재시작','관리자 접근으로 돌아간다','',"cs5('b4')")
+  +btn('↩C','S3 재시작','금빛 광장으로 돌아간다','',"cs5('b3')");
+  render(scene('s5','Scene 05 / 전(轉) — 절정','<em>최종 코어</em> — 선녀 vs PZ',`빛나는 저울 홀로그램 · ${sub}`,'',narr,warn+ch_));
+}
+function cs5(c){
+  if(c==='win'){const t=G.key?30:38;(G.i>=t||G.s>=t)?go(sceneS6):go(badEnd);}
+  else if(c==='gamble'){ch('s',-10);Math.random()<0.5?go(sceneS6):go(badEnd);}
+  else if(c==='b4')go(sceneS4);
+  else if(c==='b3')go(sceneS3);
+}
+
+function sceneS6(){
+  if(G.s>=45)go(endA);
+  else if(G.i>=45)go(endB);
+  else go(badEnd);
+}
+
+function endA(){
+  render(ending('endA',
+    'End_A / Sync ≥ 45 / Clear','rev','혁명가형',
+    '왕자는 녹슬고 부서졌으나,<br>도시의 눈에서 눈물이 흘렀다.<br><br>시스템은 리부트되었다.<br>균열에서 빛이 새어나왔다.<br>이름 없는 자들이 광장에 모였다.'));
+}
+function endB(){
+  render(ending('endB',
+    'End_B / Integrity ≥ 45 / Clear','integ','인간성 회복',
+    '시민들이 왕자의 상처를 닦아주었다.<br><br>코어의 붉은 명멸은 멈추었고,<br>대신 조용하고 따뜻한 박동이 시작되었다.<br>제비 한 마리가 탑 위에서 봄을 노래했다.'));
+}
+function badEnd(){
+  render(ending('bad',
+    'Bad End / Failed','bad','도시가 정지했다',
+    '"제비야, 미안하다."<br><br>왕자의 코어가 꺼졌다.<br>도시의 불빛도 하나씩 꺼져갔다.<br>광장에는 아무도 남지 않았다.'));
+}
+
+function startGame(){
+  document.getElementById('title-screen').style.display='none';
+  document.getElementById('game').style.display='block';
+  sceneS1();
+}
+function restartGame(){
+  G={i:0,s:0,n:0,s2a:false,s3a:false,key:false};
+  hud();go(sceneS1);
+}
+</script>
+</body>
+</html>
