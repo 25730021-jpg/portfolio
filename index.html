@@ -132,7 +132,7 @@
 <body>
 
   <div id="opening-title-screen">
-    <video id="opening-bg-video" src="https://raw.githubusercontent.com/본인유저명/레포지토리명/main/Prince_overlooks_digital_city_202606211615.mp4" autoplay muted loop playsinline preload="metadata"></video>
+    <video id="opening-bg-video" src="./video/Prince_overlooks_digital_city_202606211615.mp4" autoplay muted loop playsinline preload="metadata"></video>
     <div class="video-overlay"></div>
     <div class="title-logo-box">
       <h1>행복한 왕자<br><span>사라지는 도시</span></h1>
@@ -191,16 +191,14 @@
   </main>
 
   <script>
-    // 전역 상태 변수 (STAGES 초기화 이전에 정상 선언 완료)
     let state = { sync: 0, integrity: 0, noise: 0, s2a: false, s3a: false, key: false, currentStage: "S1" };
 
-    // 🚨 [중요] 각 stage의 video 속성에 본인의 깃허브 raw 주소를 넣으셔야 합니다!
-    // 예시: "https://raw.githubusercontent.com/유저이름/저장소명/main/파일명.mp4"
     const STAGES = {
       S1: {
         title: "S1 · 탑 관측",
         badge: "STATUS: ISOLATED",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/Prince_overlooks_digital_city_202606211615.mp4", // ★ 본인 주소로 변경
+        // 🎬 [씬 1 영상 배치 완료] 상대경로 최적화
+        video: "./video/Prince_standing_atop_spire_202606221427.mp4", 
         story: "황혼빛 잿빛 도시 스카이라인. 탑 꼭대기. 왕자의 코어 점멸. 탑 꼭대기에서 도시의 신음 소리가 멀리서 울려온다. 왕자의 심장부, 녹슨 코어가 느리게 명멸한다.",
         getBanners: () => [],
         getDialogues: () => [
@@ -215,7 +213,7 @@
       S2: {
         title: "S2 · 거리 그림자",
         badge: "SIGNAL . S2",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/prince_vs_manager.mp4", // ★ 본인 주소로 변경
+        video: "./video/prince_vs_manager.mp4", 
         story: "어두운 골목. 양쪽 벽 사이 좁은 원근. 관리자의 압박 신호가 벽면에서 기괴하게 점멸하고 있다.",
         getBanners: () => {
           let list = [];
@@ -235,7 +233,7 @@
       S3: {
         title: "S3 · 금빛 광장 [핵심 분기]",
         badge: "SIGNAL . S3",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/gold_square.mp4", // ★ 본인 주소로 변경
+        video: "./video/gold_square.mp4", 
         story: "레이저 격자 광장. 회청색 격자선과 감시 노드의 스캔 포인트가 공중에서 차갑게 교차하며 사방을 수색한다.",
         getBanners: () => {
           let list = [];
@@ -262,7 +260,7 @@
       S4: {
         title: "S4 · 관리자 접근 [체크포인트]",
         badge: "CHECKPOINT . A",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/prince_vs_manager.mp4", // ★ 본인 주소로 변경
+        video: "./video/prince_vs_manager.mp4", 
         story: "금속 기둥 4개와 중앙을 부유하는 홀로그램 패널. 차가운 연산 스캔라인이 위아래로 기괴하게 움직인다.",
         getBanners: () => {
           let list = [];
@@ -294,20 +292,20 @@
       S5: {
         title: "S5 · 최종 코어 — 선녀 vs PZ",
         badge: "FINAL AREA",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/fairy_vs_pz.mp4", // ★ 본인 주소로 변경
+        video: "./video/fairy_vs_pz.mp4", 
         story: "마지막 방의 제단. 부유하는 시스템 핵심 저울 장치 앞에서 선녀 프로토콜과 강철의 PZ가 동조 파동을 대기 중입니다.",
         getBanners: () => [],
         getDialogues: () => [
           { char: "prince", name: "Prince", line: "여기가 마지막 연산지인가... 마주해야 할 최종 결과가 기다린다." }
         ],
         choices: () => [
-          { text: "가상 연회의 장으로 진입하여 최종 수치 판정을 개시한다. ➔", action: () => { nextStage("S6"); } }
+          { text: "가상 연회의 장으로 진입하여 최종 수치 판정에 개시한다. ➔", action: () => { nextStage("S6"); } }
         ]
       },
       S6: {
         title: "S6 · 가상 연회 [최종 수치 판정]",
         badge: "VIRTUAL BANQUET",
-        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/virtual_banquet.mp4", // ★ 본인 주소로 변경
+        video: "./video/virtual_banquet.mp4", 
         story: "사라져 가던 도시의 마지막 연산 로그들이 불꽃처럼 흩어지며 가상 연회가 펼쳐집니다. 이곳에서 당신이 누적해 온 심장의 동조율(Sync)과 잔존 가치(Integrity)의 최종 인과율 궤적이 연산됩니다.",
         getBanners: () => [],
         getDialogues: () => [
@@ -323,7 +321,6 @@
       document.getElementById('opening-title-screen').style.display = 'none';
       document.getElementById('game-card').classList.remove('hidden');
       
-      // 오프닝 영상 주소 동적 할당 최적화
       const openVideo = document.getElementById('opening-bg-video');
       openVideo.preload = "metadata";
       
@@ -378,18 +375,17 @@
       document.getElementById('game-story').innerText = stage.story;
       document.getElementById('game-alert-box').classList.add('hidden');
       
-      // 🚨 [스트리밍 버퍼 초기화 최적화]
       const videoTag = document.getElementById('game-video');
       videoTag.muted = true;
-      videoTag.removeAttribute('src'); // 구형 버퍼 비우기
+      videoTag.removeAttribute('src'); 
       videoTag.src = stage.video;
-      videoTag.preload = "metadata";   // 메타데이터 스트리밍 옵션 강제
-      videoTag.load();                 // 신규 스트림 로드 유도
+      videoTag.preload = "metadata";   
+      videoTag.load();                 
       
       const playPromise = videoTag.play();
       if (playPromise !== undefined) {
         playPromise.catch(error => {
-          console.log("자동재생 제한 감지 우회 작동");
+          console.log("자동재생 세이프가드 통과");
         });
       }
 
@@ -413,7 +409,7 @@
         dialogueContainer.appendChild(box);
       });
 
-      // 선택지 버튼 렌더링
+      // 선택지 매핑
       const choiceContainer = document.getElementById('game-choices');
       choiceContainer.innerHTML = '';
       
