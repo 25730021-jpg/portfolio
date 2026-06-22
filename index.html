@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Luma & Suno Studio</title>
+  <title>The Rusty Core: Interactive Portfolio</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -23,50 +23,32 @@
     body { background: var(--bg); color: var(--text-main); padding-bottom: 90px; overflow-x: hidden; line-height: 1.4; letter-spacing: -0.3px; }
 
     /* 헤더 */
-    header { background: var(--card-bg); padding: 20px 16px; border-bottom: 1px solid var(--border); text-align: center; }
-    header h1 { font-size: 20px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    header { background: var(--card-bg); padding: 25px 16px; border-bottom: 1px solid var(--border); text-align: center; }
+    header h1 { font-size: 22px; font-weight: 800; color: var(--text-main); letter-spacing: -0.5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
     header h1 span { color: var(--accent); }
-    header p { font-size: 13px; color: var(--text-sub); margin-top: 4px; font-weight: 500; }
+    header p { font-size: 13px; color: var(--text-sub); margin-top: 6px; font-weight: 500; }
 
     /* 메인 컨테이너 */
     main { max-width: 600px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 24px; }
 
-    /* 섹션 타이틀 */
-    .section-title { font-size: 14px; font-weight: 700; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; padding-left: 2px; margin-bottom: -12px; display: flex; align-items: center; gap: 6px; }
-    .section-title::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
-
     /* 카드 베이스 */
     .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
 
-    /* 상단 비디오/이미지 영역 */
+    /* 상단 비디오 영역 */
     .s-img { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
     .s-img video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-    .scene-badge { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 4px 10px; border-radius: 30px; font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid rgba(255,107,53,0.3); z-index: 10; display: flex; align-items: center; gap: 4px; }
+    .scene-badge { position: absolute; top: 12px; left: 12px; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); padding: 5px 12px; border-radius: 30px; font-size: 11px; font-weight: 700; color: var(--accent); border: 1px solid rgba(255,107,53,0.3); z-index: 10; display: flex; align-items: center; gap: 4px; }
     .scene-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, rgba(14,7,4,0.95)); z-index: 5; pointer-events: none; }
 
     /* 카드 콘텐츠 */
     .s-content { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
-    .meta-row { display: flex; justify-content: space-between; align-items: center; }
     .title-area h2 { font-size: 18px; font-weight: 700; color: var(--text-main); }
-    .title-area p { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+    .title-area p { font-size: 12px; color: var(--text-sub); margin-top: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     
-    /* 재생 제어 바 (TTS / 오디오용) */
-    .play-bar { background: var(--card-inner); border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px; display: flex; align-items: center; gap: 12px; }
-    .p-btn { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; flex-shrink: 0; }
-    .p-btn:active { transform: scale(0.92); }
-    .p-btn svg { width: 16px; height: 16px; fill: #fff; margin-left: 2px; }
-    .p-btn.playing svg { margin-left: 0; }
-    .p-info { flex: 1; min-width: 0; }
-    .p-info .p-title { font-size: 13px; font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .p-info .p-dur { font-size: 11px; color: var(--text-sub); margin-top: 1px; font-family: monospace; }
-
-    /* 가사 / 프롬프트 텍스트 상자 */
-    .text-box { background: var(--card-inner); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(255,255,255,0.02); }
+    /* 텍스트 상자 */
+    .text-box { background: var(--card-inner); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 6px; border: 1px solid rgba(255,255,255,0.02); }
     .tb-label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.5px; }
     .tb-content { font-size: 13px; color: var(--text-sub); line-height: 1.5; white-space: pre-line; }
-
-    /* 오디오 플레이어 숨김 태그 */
-    audio { display: none; }
 
     /* 하단 탭 바 지지 */
     .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-top: 1px solid var(--border); height: 68px; display: flex; justify-content: space-around; align-items: center; padding: 0 24px; z-index: 100; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
@@ -79,91 +61,84 @@
 <body>
 
   <header>
-    <h1>Cinematic & <span>AI Video</span> Studio</h1>
-    <p>Luma Dream Machine Generation Portfolio</p>
+    <h1>The Rusty Core: <span>Cinematic</span></h1>
+    <p>Luma Dream Machine Interactive Story Portfolio</p>
   </header>
 
   <main id="content-pool">
-    </main>
+    <!-- 자바스크립트가 여기에 비디오 카드를 순서대로 렌더링합니다 -->
+  </main>
 
   <nav class="nav-bar">
     <button class="nav-item active" onclick="switchTab('all', this)">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      ALL
+      ALL STORY
     </button>
-    <button class="nav-item" onclick="switchTab('video', this)">
+    <button class="nav-item" onclick="switchTab('main_story', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5.47 15.14L12 18.7l6.53-3.56-6.53-1.14-6.53 1.14z"/></svg>
+      MAIN CHAPTER
+    </button>
+    <button class="nav-item" onclick="switchTab('battle', this)">
       <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-      VIDEO
-    </button>
-    <button class="nav-item" onclick="switchTab('audio', this)">
-      <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-      AUDIO
+      BATTLE CLIPS
     </button>
   </nav>
 
   <script>
     /* ══════════════════════════════════
-       데이터 정의 (새로 업로드하신 비디오 5종 연동)
+       데이터 정의 (비디오 5종 및 스토리 연동)
        ══════════════════════════════════ */
     const DATA = [
       {
         id: "v1",
-        type: "video",
-        title: "Digital City Prince",
-        sub: "Luma Dream Machine v1.5 • Cinematic",
-        badge: "🎬 LUMA VIDEO",
+        type: "main_story",
+        title: "[기] S1 — 탑 관측 (서막)",
+        sub: "Chapter 1 • Opening Cinema",
+        badge: "🎬 S1 . OPENING",
         videoSrc: "./Prince_overlooks_digital_city_202606211615.mp4",
-        prompt: "A neon-lit cyberpunk prince standing on a skyscraper balcony, overlooking a massive, glowing digital futuristic city at midnight. High cinematic details, soft reflections, smooth camera pans.",
-        hasAudio: false
+        story: "황혼빛이 무겁게 가라앉은 잿빛의 디지털 도시, 거대한 탑 꼭대기에는 심장에 녹슨 코어가 위태롭게 명멸하는 '왕자'가 홀로 고립되어 있었습니다. 도시 아래편에서 들려오는 시민들의 고통스러운 신음 소리를 더 이상 방관할 수 없었던 왕자는 마침내 고립을 깨고 세상에 개입하기로 결심합니다."
       },
       {
         id: "v2",
-        type: "video",
-        title: "가상연회",
-        sub: "Luma Dream Machine • AI Video",
-        badge: "🎬 LUMA VIDEO",
-        videoSrc: "./가상연회.mp4",
-        prompt: "가상 연회장 안에서 펼쳐지는 화려하고 환상적인 시네마틱 장면 비디오.",
-        hasAudio: false
+        type: "main_story",
+        title: "[승] S2·S3 — 금빛 광장 (전개)",
+        sub: "Chapter 2 • Choice & Break",
+        badge: "🎬 S3 . SQUARE",
+        videoSrc: "./금빛광장.mp4",
+        story: "탑을 내려와 마주한 어두운 골목은 관리자들의 압박 신호로 가득했지만, 그곳에서 우연히 만난 '금빛 제비 드론'이 왕자에게 협력을 제안합니다. 조력자를 얻은 왕자는 치명적인 레이저 격자가 사방을 가로막은 '금빛 광장'에 도달하고, 제비 드론과 손을 잡을지 혹은 홀로 돌파할지 선택하며 감시망을 뚫고 나아갑니다."
       },
       {
         id: "v3",
-        type: "video",
-        title: "금빛광장",
-        sub: "Luma Dream Machine • AI Video",
-        badge: "🎬 LUMA VIDEO",
-        videoSrc: "./금빛광장.mp4",
-        prompt: "금빛으로 아름답게 물든 광장과 그 주변을 부드럽게 비추는 카메라 무빙 시네마틱 영상.",
-        hasAudio: false
+        type: "battle",
+        title: "[전] S4 — 관리자 접근 (위기)",
+        sub: "Chapter 3 • Encounter",
+        badge: "⚔️ S4 . BOSS APPROACH",
+        videoSrc: "./왕자vs관리자.mp4",
+        story: "삼엄한 경계를 뚫은 왕자는 마침내 금속 기둥과 홀로그램 벽으로 둘러싸인 방에서 이 세계의 '최종 관리자'와 정면으로 대면합니다. 매수와 해킹, 설득이라는 치명적인 두뇌 싸움 끝에 관리자를 무너뜨릴 핵심 열쇠를 손에 넣기 위한 숨 막히는 국면이 시작됩니다."
       },
       {
         id: "v4",
-        type: "video",
-        title: "선녀 vs PZ",
-        sub: "Luma Dream Machine • Battle Cinematic",
-        badge: "🎬 LUMA VIDEO",
+        type: "battle",
+        title: "[전] S5 — 최종 코어 (절정)",
+        sub: "Chapter 4 • Final Clash",
+        badge: "⚔️ S5 . CLIMAX BATTLE",
         videoSrc: "./선녀vsPZ.mp4",
-        prompt: "선녀와 PZ 캐릭터 간의 역동적이고 화려한 비주얼 이펙트가 돋보이는 전투 장면.",
-        hasAudio: false
+        story: "최종 관문에 들어서자 거대하게 빛나는 저울 홀로그램을 사이에 두고 도시의 운명을 쥔 '선녀'와 보안 시스템 'PZ'가 일촉즉발의 대치를 벌이고 있었습니다. 저울 위에 오르는 것은 다름 아닌 지금까지 왕자가 세상에 개입하며 쌓아온 선택의 무게이자 마지막 심판이었습니다."
       },
       {
         id: "v5",
-        type: "video",
-        title: "왕자 vs 관리자",
-        sub: "Luma Dream Machine • Battle Cinematic",
-        badge: "🎬 LUMA VIDEO",
-        videoSrc: "./왕자vs관리자.mp4",
-        prompt: "왕자와 관리자의 대립을 다룬 웅장하고 긴장감 넘치는 SF/판타지 시네마틱 대결 영상.",
-        hasAudio: false
+        type: "main_story",
+        title: "[결] S6 — 가상 연회 (결말)",
+        sub: "Chapter 5 • Ending Credit",
+        badge: "🎬 S6 . EPILOGUE",
+        videoSrc: "./가상연회.mp4",
+        story: "치열했던 심판의 순간이 지나고, 도시 전체의 데이터 로그가 밤하늘에 별빛처럼 화려하게 시각화되는 '가상 연회'가 개최됩니다. 이곳에서 왕자가 걸어온 모든 발자취가 정산되며 도시의 운명이 결정됩니다. 과감한 결단력으로 세상을 이끌었다면 [혁명가]가 될 것이고, 따뜻한 가치를 지켜냈다면 [인간성 회복자]가 되어 새로운 새벽을 맞이할 것입니다."
       }
     ];
 
     /* ══════════════════════════════════
-       플레이어 핵심 로직 및 렌더링 함수
+       렌더링 시스템 로직
        ══════════════════════════════════ */
-    let currentAudio = null;
-    let currentBtn = null;
-
     function render(filter = 'all') {
       const pool = document.getElementById('content-pool');
       pool.innerHTML = '';
@@ -174,28 +149,15 @@
         const card = document.createElement('div');
         card.className = 'card';
 
-        // 한글 파일명의 깨짐을 방지하기 위해 encodeURIComponent 기반 경로 처리 적용
+        // 공백 및 한글 인코딩 안전 우회
         const encodedSrc = encodeURI(d.videoSrc);
 
-        // 비디오 재생 영역 생성
-        let mediaLayout = `
+        card.innerHTML = `
           <div class="s-img">
             <video src="${encodedSrc}" autoplay muted loop playsinline></video>
             <div class="scene-badge">${d.badge}</div>
             <div class="scene-overlay"></div>
           </div>
-        `;
-
-        // 프롬프트 또는 설명 상자 생성
-        let textSection = `
-          <div class="text-box">
-            <div class="tb-label">AI Generation Prompt / Description</div>
-            <div class="tb-content">${d.prompt}</div>
-          </div>
-        `;
-
-        card.innerHTML = `
-          ${mediaLayout}
           <div class="s-content">
             <div class="meta-row">
               <div class="title-area">
@@ -203,7 +165,10 @@
                 <p>${d.sub}</p>
               </div>
             </div>
-            ${textSection}
+            <div class="text-box">
+              <div class="tb-label">Synopsis / Scenario</div>
+              <div class="tb-content">${d.story}</div>
+            </div>
           </div>
         `;
         pool.appendChild(card);
@@ -211,7 +176,7 @@
     }
 
     /* ══════════════════════════════════
-       네비게이션 탭 스위칭 함수
+       탭 스위칭 기능
        ══════════════════════════════════ */
     function switchTab(type, btn) {
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -219,7 +184,7 @@
       render(type);
     }
 
-    // 초기 화면 진입 시 전체 아이템 로드
+    // 로드 시 전체 리스트업
     window.onload = () => render('all');
   </script>
 </body>
