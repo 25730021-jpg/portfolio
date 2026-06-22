@@ -7,18 +7,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
-      --bg: #050302;
-      --card-bg: #120906;
-      --card-inner: #1a0f0a;
-      --border: #2b170e;
-      --text-main: #ebdcd5;
-      --text-sub: #9e8a80;
-      --accent: #e64a19;
+      --bg: #030202;
+      --card-bg: #090605;
+      --card-inner: #0f0a08;
+      --border: #1f120c;
+      --text-main: #dfdedd;
+      --text-sub: #7a706b;
+      --accent: #bf360c; 
       --font: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); }
-    body { background: var(--bg); color: var(--text-main); padding-bottom: 60px; overflow-x: hidden; line-height: 1.6; letter-spacing: -0.4px; }
+    body { background: var(--bg); color: var(--text-main); padding-bottom: 60px; overflow-x: hidden; line-height: 1.6; letter-spacing: -0.5px; }
 
     /* 오프닝 타이틀 */
     #opening-title-screen {
@@ -42,95 +42,97 @@
       height: 100%;
       object-fit: cover;
       transform: translate(-50%, -50%);
-      filter: brightness(0.4) contrast(1.2) blur(1px);
+      filter: brightness(0.6) contrast(1.2);
       z-index: 1;
     }
     .video-overlay {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(12, 6, 4, 0.4) 0%, rgba(5, 3, 2, 0.85) 100%);
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.1) 0%, rgba(3, 2, 2, 0.85) 100%);
       z-index: 2;
     }
-    .title-logo-box { position: relative; z-index: 3; margin-bottom: 50px; animation: glitchGlow 4s infinite alternate; }
-    .title-logo-box h1 { font-size: 38px; font-weight: 900; color: var(--text-main); letter-spacing: -1.5px; line-height: 1.3; }
-    .title-logo-box h1 span { color: var(--accent); text-shadow: 0 0 25px rgba(230,74,25,0.6); }
-    .title-logo-box p { font-size: 11px; color: var(--text-sub); margin-top: 14px; font-weight: 400; letter-spacing: 5px; opacity: 0.8; }
+    .title-logo-box { position: relative; z-index: 3; margin-bottom: 60px; text-shadow: 0 0 15px rgba(0,0,0,0.9); }
+    .title-logo-box h1 { font-size: 36px; font-weight: 900; color: #fff; letter-spacing: -2px; line-height: 1.3; }
+    .title-logo-box h1 span { color: var(--accent); text-shadow: 0 0 20px rgba(191,54,12,0.8); }
+    .title-logo-box p { font-size: 10px; color: var(--text-sub); margin-top: 16px; font-weight: 500; letter-spacing: 6px; opacity: 0.6; }
     
     .start-game-btn {
       position: relative;
       z-index: 3;
-      background: rgba(18, 9, 6, 0.8);
-      border: 1px solid var(--accent);
+      background: rgba(5, 3, 2, 0.9);
+      border: 1px solid rgba(191, 54, 12, 0.5);
       color: var(--text-main);
-      padding: 18px 50px;
-      font-size: 14px;
+      padding: 16px 54px;
+      font-size: 13px;
       font-weight: 700;
-      border-radius: 4px;
+      border-radius: 2px;
       cursor: pointer;
-      letter-spacing: 2px;
-      backdrop-filter: blur(4px);
-      box-shadow: 0 0 20px rgba(230,74,25,0.15);
-      transition: all 0.4s ease;
+      letter-spacing: 3px;
+      backdrop-filter: blur(8px);
+      transition: all 0.5s ease;
     }
-    .start-game-btn:hover { background: var(--accent); color: #fff; box-shadow: 0 0 30px rgba(230,74,25,0.4); transform: scale(1.02); }
+    .start-game-btn:hover { background: var(--accent); color: #fff; border-color: #fff; box-shadow: 0 0 25px rgba(191,54,12,0.6); }
 
     /* 상단 데이터 계기판 */
-    header { background: #0c0604; padding: 16px; border-bottom: 1px solid var(--border); text-align: center; font-size: 15px; font-weight: 700; color: var(--text-sub); letter-spacing: 1px; }
+    header { background: #000; padding: 14px; border-bottom: 1px solid var(--border); text-align: center; font-size: 12px; font-weight: 700; color: var(--text-sub); letter-spacing: 2px; text-transform: uppercase; }
 
-    .status-panel { max-width: 650px; margin: 20px auto 0 auto; padding: 14px 18px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; display: flex; justify-content: space-around; align-items: center; text-align: center; opacity: 0.8; }
+    .status-panel { max-width: 650px; margin: 24px auto 0 auto; padding: 12px 16px; background: rgba(9,6,5,0.7); border: 1px solid var(--border); border-radius: 2px; display: flex; justify-content: space-around; align-items: center; text-align: center; }
     .stat-box { flex: 1; }
-    .stat-label { font-size: 10px; color: var(--text-sub); font-weight: 500; }
-    .stat-val { font-size: 15px; font-weight: 700; color: var(--text-main); margin-top: 4px; font-family: monospace; }
-    .stat-critical { color: var(--accent) !important; text-shadow: 0 0 8px rgba(230,74,25,0.5); }
+    .stat-label { font-size: 9px; color: var(--text-sub); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .stat-val { font-size: 14px; font-weight: 700; color: var(--text-main); margin-top: 4px; font-family: monospace; }
+    .stat-critical { color: #d32f2f !important; text-shadow: 0 0 10px rgba(211,47,47,0.8); }
 
     main { max-width: 650px; margin: 20px auto; padding: 0 16px; }
 
-    /* 카드 프레임 */
-    .game-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 16px 44px rgba(0,0,0,0.7); }
+    /* 모니터 카드 프레임 박스 */
+    .game-container { background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.95); }
     
-    .screen-area { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
-    .screen-area video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7) contrast(1.1); }
-    .stage-badge { position: absolute; top: 14px; left: 14px; background: rgba(5,3,2,0.85); padding: 5px 12px; font-size: 10px; font-weight: 600; color: var(--text-sub); border: 1px solid var(--border); letter-spacing: 1px; }
+    .screen-area { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; overflow: hidden; }
+    .screen-area video { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.85) contrast(1.15); }
+    .stage-badge { position: absolute; top: 14px; left: 14px; background: #000; padding: 4px 10px; font-size: 9px; font-weight: 700; color: #d32f2f; border: 1px solid rgba(211,47,47,0.4); letter-spacing: 1px; font-family: monospace; z-index: 10; }
     
-    .condition-banner-area { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
-    .cond-banner { background: rgba(230, 74, 25, 0.2); border: 1px solid var(--accent); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 2px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 0 0 10px rgba(230,74,25,0.2); }
+    .condition-banner-area { position: absolute; top: 14px; right: 14px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; z-index: 10; }
+    .cond-banner { background: #000; border: 1px solid #d32f2f; color: #d32f2f; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 1px; letter-spacing: 1px; box-shadow: 0 0 12px rgba(211,47,47,0.4); font-family: monospace; }
     
-    .screen-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, rgba(18,9,6,0.98)); pointer-events: none; }
+    .screen-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 60%, #090605 100%); pointer-events: none; z-index: 2; }
 
-    .content-area { padding: 30px 24px 24px 24px; display: flex; flex-direction: column; gap: 20px; background: linear-gradient(to bottom, rgba(18,9,6,0) 0%, #120906 100%); }
-    .stage-title { font-size: 18px; font-weight: 700; color: var(--text-main); border-left: 3px solid var(--accent); padding-left: 12px; }
+    .content-area { padding: 24px; display: flex; flex-direction: column; gap: 20px; background: #090605; }
+    .stage-title { font-size: 16px; font-weight: 800; color: #fff; border-left: 2px solid var(--accent); padding-left: 10px; letter-spacing: -0.5px; }
     
-    .story-text { font-size: 14.5px; color: var(--text-sub); line-height: 1.8; background: rgba(26, 15, 10, 0.5); padding: 22px 20px; border-radius: 6px; border: 1px solid rgba(43, 23, 14, 0.3); display: flex; flex-direction: column; gap: 14px; }
-    .system-alert-text { color: var(--accent); font-weight: 700; border-bottom: 1px dashed rgba(230,74,25,0.4); padding-bottom: 10px; font-family: monospace; }
+    /* 지문창 패널 */
+    .story-text { font-size: 14px; color: #b5ada9; line-height: 1.8; background: var(--card-inner); padding: 20px; border-radius: 2px; border: 1px solid rgba(31, 18, 12, 0.4); display: flex; flex-direction: column; gap: 14px; }
+    .system-alert-text { color: var(--accent); font-weight: 700; border-bottom: 1px dashed var(--border); padding-bottom: 10px; font-family: monospace; font-size: 13px; text-shadow: 0 0 5px rgba(191,54,12,0.4); }
 
-    /* 캐릭터 대사창 */
-    .dialogue-box { background: rgba(5, 3, 2, 0.4); padding: 12px 14px; border-left: 2px solid var(--text-sub); margin-top: 4px; }
-    .dialogue-box.prince { border-left-color: var(--text-main); }
-    .dialogue-box.swallow { border-left-color: #ffd54f; }
-    .dialogue-box.pz { border-left-color: #ef5350; }
-    .dialogue-box.manager { border-left-color: #26a69a; }
-    .char-name { font-size: 11px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; color: var(--text-sub); }
-    .dialogue-box.prince .char-name { color: var(--text-main); }
-    .dialogue-box.swallow .char-name { color: #ffd54f; }
-    .dialogue-box.pz .char-name { color: #ef5350; }
-    .dialogue-box.manager .char-name { color: #26a69a; }
-    .char-line { font-style: italic; font-size: 13.5px; color: var(--text-main); }
+    /* 대사창 */
+    .dialogue-box { background: rgba(3, 2, 2, 0.7); padding: 12px; border-left: 1px solid #554b45; margin-top: 2px; }
+    .dialogue-box.prince { border-left-color: #9e9792; }
+    .dialogue-box.swallow { border-left-color: #bfa03f; }
+    .dialogue-box.pz { border-left-color: #a83232; }
+    .dialogue-box.manager { border-left-color: #21736b; }
+    
+    .char-name { font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; letter-spacing: 1px; color: var(--text-sub); }
+    .dialogue-box.prince .char-name { color: #fff; }
+    .dialogue-box.swallow .char-name { color: #ffd54f; text-shadow: 0 0 5px rgba(255,213,79,0.3); }
+    .dialogue-box.pz .char-name { color: #ef5350; text-shadow: 0 0 5px rgba(239,83,80,0.3); }
+    .dialogue-box.manager .char-name { color: #26a69a; text-shadow: 0 0 5px rgba(38,166,154,0.3); }
+    .char-line { font-style: normal; font-size: 13px; color: #dcd4cf; }
 
-    .choice-area { display: flex; flex-direction: column; gap: 12px; }
-    .choice-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 18px 22px; border-radius: 4px; font-size: 14px; font-weight: 500; text-align: left; cursor: pointer; line-height: 1.5; transition: all 0.3s; }
-    .choice-btn:hover { border-color: var(--accent); color: var(--text-main); background: #21120b; }
+    /* 선택지 버튼 */
+    .choice-area { display: flex; flex-direction: column; gap: 10px; }
+    .choice-btn { background: #050302; border: 1px solid var(--border); color: var(--text-main); padding: 16px 20px; border-radius: 2px; font-size: 13px; font-weight: 600; text-align: left; cursor: pointer; line-height: 1.5; transition: all 0.3s ease; }
+    .choice-btn:hover { border-color: var(--accent); color: #fff; background: #140b07; box-shadow: 0 0 15px rgba(191,54,12,0.15); }
 
     .hidden { display: none !important; }
-    .ending-box { background: #0c0604; border: 1px solid var(--border); padding: 40px 24px; text-align: center; border-radius: 8px; margin-top: 20px; }
-    .ending-title { font-size: 20px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; }
-    .reset-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 14px 36px; border-radius: 4px; font-weight: 600; cursor: pointer; margin-top: 30px; }
-    .reset-btn:hover { border-color: var(--accent); color: var(--text-main); }
+    .ending-box { background: #000; border: 1px solid #d32f2f; padding: 46px 24px; text-align: center; border-radius: 2px; margin-top: 20px; box-shadow: 0 0 30px rgba(211,47,47,0.15); }
+    .ending-title { font-size: 19px; font-weight: 900; color: #fff; margin-bottom: 22px; letter-spacing: -1px; }
+    .reset-btn { background: transparent; border: 1px solid var(--border); color: var(--text-sub); padding: 12px 32px; border-radius: 2px; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 32px; letter-spacing: 1px; }
+    .reset-btn:hover { border-color: #fff; color: #fff; background: #090605; }
   </style>
 </head>
 <body>
 
   <div id="opening-title-screen">
-    <video id="opening-bg-video" src="./Prince_overlooks_digital_city_202606211615.mp4" autoplay muted loop playsinline></video>
+    <video id="opening-bg-video" src="https://raw.githubusercontent.com/본인유저명/레포지토리명/main/Prince_overlooks_digital_city_202606211615.mp4" autoplay muted loop playsinline preload="metadata"></video>
     <div class="video-overlay"></div>
     <div class="title-logo-box">
       <h1>행복한 왕자<br><span>사라지는 도시</span></h1>
@@ -139,23 +141,23 @@
     <button class="start-game-btn" onclick="startGame()">동조 수신기 가동</button>
   </div>
 
-  <header>행복한 왕자 : 사라지는 도시</header>
+  <header>SYSTEM INTERFACES // PROTOTYPE_v6</header>
 
   <div class="status-panel">
     <div class="stat-box">
-      <div class="stat-label">Sync (동조)</div>
+      <div class="stat-label">Sync</div>
       <div id="stat-sync" class="stat-val">00</div>
     </div>
     <div class="stat-box" style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
-      <div class="stat-label">Integrity (가치)</div>
+      <div class="stat-label">Integrity</div>
       <div id="stat-integrity" class="stat-val">00</div>
     </div>
     <div class="stat-box" style="border-right: 1px solid var(--border);">
-      <div class="stat-label">Erosion (침식/Noise)</div>
+      <div class="stat-label">Erosion (Noise)</div>
       <div id="stat-noise" class="stat-val">00</div>
     </div>
     <div class="stat-box">
-      <div class="stat-label">Core Flag (해독)</div>
+      <div class="stat-label">Core Flag</div>
       <div id="stat-key" class="stat-val">LOCKED</div>
     </div>
   </div>
@@ -163,7 +165,7 @@
   <main>
     <div class="game-container hidden" id="game-card">
       <div class="screen-area">
-        <video id="game-video" src="" autoplay muted loop playsinline></video>
+        <video id="game-video" src="" autoplay muted loop playsinline preload="metadata" controlslist="nodownload"></video>
         <div class="stage-badge" id="game-badge">LOG</div>
         <div class="condition-banner-area" id="banner-zone"></div>
         <div class="screen-overlay"></div>
@@ -189,14 +191,16 @@
   </main>
 
   <script>
+    // 전역 상태 변수 (STAGES 초기화 이전에 정상 선언 완료)
     let state = { sync: 0, integrity: 0, noise: 0, s2a: false, s3a: false, key: false, currentStage: "S1" };
 
-    // 🚨 [영문 주소 대수술] 한글 파일 깨짐 현상을 완전히 박멸하기 위해 경로를 순수 영어 파일명으로 교체했습니다.
+    // 🚨 [중요] 각 stage의 video 속성에 본인의 깃허브 raw 주소를 넣으셔야 합니다!
+    // 예시: "https://raw.githubusercontent.com/유저이름/저장소명/main/파일명.mp4"
     const STAGES = {
       S1: {
         title: "S1 · 탑 관측",
         badge: "STATUS: ISOLATED",
-        video: "Prince_overlooks_digital_city_202606211615.mp4",
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/Prince_overlooks_digital_city_202606211615.mp4", // ★ 본인 주소로 변경
         story: "황혼빛 잿빛 도시 스카이라인. 탑 꼭대기. 왕자의 코어 점멸. 탑 꼭대기에서 도시의 신음 소리가 멀리서 울려온다. 왕자의 심장부, 녹슨 코어가 느리게 명멸한다.",
         getBanners: () => [],
         getDialogues: () => [
@@ -211,7 +215,7 @@
       S2: {
         title: "S2 · 거리 그림자",
         badge: "SIGNAL . S2",
-        video: "gold_square.mp4", 
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/prince_vs_manager.mp4", // ★ 본인 주소로 변경
         story: "어두운 골목. 양쪽 벽 사이 좁은 원근. 관리자의 압박 신호가 벽면에서 기괴하게 점멸하고 있다.",
         getBanners: () => {
           let list = [];
@@ -231,7 +235,7 @@
       S3: {
         title: "S3 · 금빛 광장 [핵심 분기]",
         badge: "SIGNAL . S3",
-        video: "gold_square.mp4",
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/gold_square.mp4", // ★ 본인 주소로 변경
         story: "레이저 격자 광장. 회청색 격자선과 감시 노드의 스캔 포인트가 공중에서 차갑게 교차하며 사방을 수색한다.",
         getBanners: () => {
           let list = [];
@@ -258,7 +262,7 @@
       S4: {
         title: "S4 · 관리자 접근 [체크포인트]",
         badge: "CHECKPOINT . A",
-        video: "prince_vs_manager.mp4",
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/prince_vs_manager.mp4", // ★ 본인 주소로 변경
         story: "금속 기둥 4개와 중앙을 부유하는 홀로그램 패널. 차가운 연산 스캔라인이 위아래로 기괴하게 움직인다.",
         getBanners: () => {
           let list = [];
@@ -290,7 +294,7 @@
       S5: {
         title: "S5 · 최종 코어 — 선녀 vs PZ",
         badge: "FINAL AREA",
-        video: "fairy_vs_pz.mp4",
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/fairy_vs_pz.mp4", // ★ 본인 주소로 변경
         story: "마지막 방의 제단. 부유하는 시스템 핵심 저울 장치 앞에서 선녀 프로토콜과 강철의 PZ가 동조 파동을 대기 중입니다.",
         getBanners: () => [],
         getDialogues: () => [
@@ -303,7 +307,7 @@
       S6: {
         title: "S6 · 가상 연회 [최종 수치 판정]",
         badge: "VIRTUAL BANQUET",
-        video: "virtual_banquet.mp4",
+        video: "https://raw.githubusercontent.com/본인유저명/레포지토리명/main/virtual_banquet.mp4", // ★ 본인 주소로 변경
         story: "사라져 가던 도시의 마지막 연산 로그들이 불꽃처럼 흩어지며 가상 연회가 펼쳐집니다. 이곳에서 당신이 누적해 온 심장의 동조율(Sync)과 잔존 가치(Integrity)의 최종 인과율 궤적이 연산됩니다.",
         getBanners: () => [],
         getDialogues: () => [
@@ -318,6 +322,11 @@
     function startGame() {
       document.getElementById('opening-title-screen').style.display = 'none';
       document.getElementById('game-card').classList.remove('hidden');
+      
+      // 오프닝 영상 주소 동적 할당 최적화
+      const openVideo = document.getElementById('opening-bg-video');
+      openVideo.preload = "metadata";
+      
       nextStage("S1");
     }
 
@@ -330,7 +339,7 @@
       if(state.noise >= 20) { noiseTag.classList.add('stat-critical'); } 
       else { noiseTag.classList.remove('stat-critical'); }
 
-      document.getElementById('stat-key').innerText = state.key ? "DECRYPTED (TRUE)" : "LOCKED (FALSE)";
+      document.getElementById('stat-key').innerText = state.key ? "TRUE" : "LOCKED";
     }
 
     function showResultInGame(message, nextStageKey) {
@@ -345,9 +354,10 @@
       const btn = document.createElement('button');
       btn.className = 'choice-btn';
       btn.style.borderColor = 'var(--accent)';
-      btn.style.color = 'var(--text-main)';
+      btn.style.color = '#fff';
       btn.innerText = "연산 구역 계속 이동하기 ➔";
-      btn.onclick = () => {
+      
+      btn.onclick = function() {
         alertBox.classList.add('hidden');
         nextStage(nextStageKey);
       };
@@ -355,6 +365,10 @@
     }
 
     function nextStage(stageKey) {
+      if (!STAGES[stageKey]) {
+        stageKey = "S1";
+      }
+
       state.currentStage = stageKey;
       updateUI();
 
@@ -364,9 +378,20 @@
       document.getElementById('game-story').innerText = stage.story;
       document.getElementById('game-alert-box').classList.add('hidden');
       
+      // 🚨 [스트리밍 버퍼 초기화 최적화]
       const videoTag = document.getElementById('game-video');
-      videoTag.src = "./" + stage.video; // 인코딩 함수 걷어내고 다이렉트 영어 호출
-      videoTag.play().catch(e => { console.log("비디오 재생 오류 방지 처리"); });
+      videoTag.muted = true;
+      videoTag.removeAttribute('src'); // 구형 버퍼 비우기
+      videoTag.src = stage.video;
+      videoTag.preload = "metadata";   // 메타데이터 스트리밍 옵션 강제
+      videoTag.load();                 // 신규 스트림 로드 유도
+      
+      const playPromise = videoTag.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(error => {
+          console.log("자동재생 제한 감지 우회 작동");
+        });
+      }
 
       // 배너 갱신
       const bannerZone = document.getElementById('banner-zone');
@@ -388,16 +413,19 @@
         dialogueContainer.appendChild(box);
       });
 
-      // 선택지 갱신
+      // 선택지 버튼 렌더링
       const choiceContainer = document.getElementById('game-choices');
       choiceContainer.innerHTML = '';
-      stage.choices().forEach((choice) => {
+      
+      const currentChoices = stage.choices();
+      for (let i = 0; i < currentChoices.length; i++) {
+        const choice = currentChoices[i];
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
         btn.innerText = choice.text;
-        btn.onclick = choice.action;
+        btn.onclick = choice.action; 
         choiceContainer.appendChild(btn);
-      });
+      }
     }
 
     function processEnding() {
