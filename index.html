@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Suno & Luma Studio</title>
+  <title>Luma & Suno Studio</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
   <style>
     :root {
@@ -79,13 +79,12 @@
 <body>
 
   <header>
-    <h1>Suno & <span>Luma</span> Studio</h1>
-    <p>AI Generated Music & Cinematic Video</p>
+    <h1>Cinematic & <span>AI Video</span> Studio</h1>
+    <p>Luma Dream Machine Generation Portfolio</p>
   </header>
 
   <main id="content-pool">
-    <!-- 자바스크립트가 여기에 카드를 동적으로 렌더링합니다 -->
-  </main>
+    </main>
 
   <nav class="nav-bar">
     <button class="nav-item active" onclick="switchTab('all', this)">
@@ -104,7 +103,7 @@
 
   <script>
     /* ══════════════════════════════════
-       데이터 정의 (오디오 경로 매칭 및 비디오 레이아웃 통합)
+       데이터 정의 (새로 업로드하신 비디오 5종 연동)
        ══════════════════════════════════ */
     const DATA = [
       {
@@ -113,50 +112,49 @@
         title: "Digital City Prince",
         sub: "Luma Dream Machine v1.5 • Cinematic",
         badge: "🎬 LUMA VIDEO",
-        // 상단에 삽입될 비디오 전용 HTML 구조 정의 (자동재생/음소거 우회 적용)
-        videoHtml: `
-          <div class="s-img">
-            <video src="./Prince_overlooks_digital_city_202606211615.mp4" autoplay muted loop playsinline></video>
-            <div class="scene-badge">🎬 LUMA VIDEO</div>
-            <div class="scene-overlay"></div>
-          </div>
-        `,
+        videoSrc: "./Prince_overlooks_digital_city_202606211615.mp4",
         prompt: "A neon-lit cyberpunk prince standing on a skyscraper balcony, overlooking a massive, glowing digital futuristic city at midnight. High cinematic details, soft reflections, smooth camera pans.",
         hasAudio: false
       },
       {
-        id: "a1",
-        type: "audio",
-        title: "Neon Horizon",
-        sub: "Suno v3.5 • Synthwave / Cyberpunk",
-        badge: "🎵 SUNO AUDIO",
-        // 오디오 카드는 기존의 심플하고 깔끔한 어두운 배경으로 처리합니다
-        videoHtml: `
-          <div class="s-img" style="background:#150c09; display:flex; align-items:center; justify-content:center;">
-            <div class="scene-badge">🎵 SUNO AUDIO</div>
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="rgba(255,107,53,0.15)" style="animation: pulse 2s infinite alternate;"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-            <style>@keyframes pulse { from { transform: scale(0.95); opacity: 0.6; } to { transform: scale(1.05); opacity: 1; } }</style>
-          </div>
-        `,
-        audioSrc: "./character", 
-        lyrics: "[Verse 1]\nNeon lights guide the lonely soul\nThrough streets of code, we lose control\n\n[Chorus]\nRunning on the edge of time\nThis digital heart is yours and mine",
-        hasAudio: true
+        id: "v2",
+        type: "video",
+        title: "가상연회",
+        sub: "Luma Dream Machine • AI Video",
+        badge: "🎬 LUMA VIDEO",
+        videoSrc: "./가상연회.mp4",
+        prompt: "가상 연회장 안에서 펼쳐지는 화려하고 환상적인 시네마틱 장면 비디오.",
+        hasAudio: false
       },
       {
-        id: "a2",
-        type: "audio",
-        title: "Cyber Whisper",
-        sub: "Suno v3.5 • Ambient / Lo-Fi",
-        badge: "🎵 SUNO AUDIO",
-        videoHtml: `
-          <div class="s-img" style="background:#0b0f19; display:flex; align-items:center; justify-content:center;">
-            <div class="scene-badge">🎵 SUNO AUDIO</div>
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="rgba(255,107,53,0.15)" style="animation: pulse 2s infinite alternate;"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-          </div>
-        `,
-        audioSrc: "./tts", 
-        lyrics: "[Spoken Word]\nIn the quiet hum of the server rooms...\nI heard your voice whisper my name.\nAn echo in the data stream.",
-        hasAudio: true
+        id: "v3",
+        type: "video",
+        title: "금빛광장",
+        sub: "Luma Dream Machine • AI Video",
+        badge: "🎬 LUMA VIDEO",
+        videoSrc: "./금빛광장.mp4",
+        prompt: "금빛으로 아름답게 물든 광장과 그 주변을 부드럽게 비추는 카메라 무빙 시네마틱 영상.",
+        hasAudio: false
+      },
+      {
+        id: "v4",
+        type: "video",
+        title: "선녀 vs PZ",
+        sub: "Luma Dream Machine • Battle Cinematic",
+        badge: "🎬 LUMA VIDEO",
+        videoSrc: "./선녀vsPZ.mp4",
+        prompt: "선녀와 PZ 캐릭터 간의 역동적이고 화려한 비주얼 이펙트가 돋보이는 전투 장면.",
+        hasAudio: false
+      },
+      {
+        id: "v5",
+        type: "video",
+        title: "왕자 vs 관리자",
+        sub: "Luma Dream Machine • Battle Cinematic",
+        badge: "🎬 LUMA VIDEO",
+        videoSrc: "./왕자vs관리자.mp4",
+        prompt: "왕자와 관리자의 대립을 다룬 웅장하고 긴장감 넘치는 SF/판타지 시네마틱 대결 영상.",
+        hasAudio: false
       }
     ];
 
@@ -176,43 +174,28 @@
         const card = document.createElement('div');
         card.className = 'card';
 
-        // 오디오 제어 패널 HTML 생성 (오디오 파일이 있는 경우에만 표시)
-        let audioSection = '';
-        if (d.hasAudio) {
-          audioSection = `
-            <div class="play-bar">
-              <button class="p-btn" onclick="togglePlay('${d.id}', this)">
-                <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-              </button>
-              <div class="p-info">
-                <div class="p-title">${d.title} - Audio Track</div>
-                <div class="p-dur" id="dur-${d.id}">0:00</div>
-              </div>
-              <audio id="audio-${d.id}" src="${d.audioSrc}" ontimeupdate="updateProgress('${d.id}')" onloadedmetadata="initDuration('${d.id}')" onended="resetAudio('${d.id}')"></audio>
-            </div>
-          `;
-        }
+        // 한글 파일명의 깨짐을 방지하기 위해 encodeURIComponent 기반 경로 처리 적용
+        const encodedSrc = encodeURI(d.videoSrc);
 
-        // 프롬프트 또는 가사 텍스트 상자 생성
-        let textSection = '';
-        if (d.type === 'video') {
-          textSection = `
-            <div class="text-box">
-              <div class="tb-label">AI Generation Prompt</div>
-              <div class="tb-content">${d.prompt}</div>
-            </div>
-          `;
-        } else if (d.type === 'audio') {
-          textSection = `
-            <div class="text-box">
-              <div class="tb-label">Lyrics / Generation Script</div>
-              <div class="tb-content">${d.lyrics}</div>
-            </div>
-          `;
-        }
+        // 비디오 재생 영역 생성
+        let mediaLayout = `
+          <div class="s-img">
+            <video src="${encodedSrc}" autoplay muted loop playsinline></video>
+            <div class="scene-badge">${d.badge}</div>
+            <div class="scene-overlay"></div>
+          </div>
+        `;
+
+        // 프롬프트 또는 설명 상자 생성
+        let textSection = `
+          <div class="text-box">
+            <div class="tb-label">AI Generation Prompt / Description</div>
+            <div class="tb-content">${d.prompt}</div>
+          </div>
+        `;
 
         card.innerHTML = `
-          ${d.videoHtml}
+          ${mediaLayout}
           <div class="s-content">
             <div class="meta-row">
               <div class="title-area">
@@ -220,7 +203,6 @@
                 <p>${d.sub}</p>
               </div>
             </div>
-            ${audioSection}
             ${textSection}
           </div>
         `;
@@ -229,81 +211,9 @@
     }
 
     /* ══════════════════════════════════
-       오디오 제어 기능 함수들
-       ══════════════════════════════════ */
-    function togglePlay(id, btn) {
-      const aud = document.getElementById(`audio-${id}`);
-      
-      if (currentAudio && currentAudio !== aud) {
-        currentAudio.pause();
-        if (currentBtn) setPlayIcon(currentBtn, false);
-      }
-
-      if (aud.paused) {
-        aud.play().catch(e => console.log("재생 실패:", e));
-        setPlayIcon(btn, true);
-        currentAudio = aud;
-        currentBtn = btn;
-      } else {
-        aud.pause();
-        setPlayIcon(btn, false);
-        currentAudio = null;
-        currentBtn = null;
-      }
-    }
-
-    function setPlayIcon(btn, isPlaying) {
-      if (isPlaying) {
-        btn.classList.add('playing');
-        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
-      } else {
-        btn.classList.remove('playing');
-        btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-      }
-    }
-
-    function initDuration(id) {
-      const aud = document.getElementById(`audio-${id}`);
-      const durDisplay = document.getElementById(`dur-${id}`);
-      durDisplay.innerText = `0:00 / ${fmtTime(aud.duration)}`;
-    }
-
-    function updateProgress(id) {
-      const aud = document.getElementById(`audio-${id}`);
-      const durDisplay = document.getElementById(`dur-${id}`);
-      durDisplay.innerText = `${fmtTime(aud.currentTime)} / ${fmtTime(aud.duration)}`;
-    }
-
-    function resetAudio(id) {
-      const btn = document.querySelector(`[onclick="togglePlay('${id}', this)"]`);
-      if (btn) setPlayIcon(btn, false);
-      const durDisplay = document.getElementById(`dur-${id}`);
-      const aud = document.getElementById(`audio-${id}`);
-      if (durDisplay && aud) durDisplay.innerText = `0:00 / ${fmtTime(aud.duration)}`;
-      if (currentAudio === aud) {
-        currentAudio = null;
-        currentBtn = null;
-      }
-    }
-
-    function fmtTime(sec) {
-      if (isNaN(sec)) return "0:00";
-      const m = Math.floor(sec / 60);
-      const s = Math.floor(sec % 60);
-      return `${m}:${s < 10 ? '0' : ''}${s}`;
-    }
-
-    /* ══════════════════════════════════
        네비게이션 탭 스위칭 함수
        ══════════════════════════════════ */
     function switchTab(type, btn) {
-      if (currentAudio) {
-        currentAudio.pause();
-        if (currentBtn) setPlayIcon(currentBtn, false);
-        currentAudio = null;
-        currentBtn = null;
-      }
-      
       document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
       btn.classList.add('active');
       render(type);
